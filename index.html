@@ -349,6 +349,7 @@
             id="email"
             class="form-input"
             placeholder="name@sentbe.com"
+            pattern=".+@sentbe\.com"
             autocomplete="email"
           />
         </div>
@@ -374,7 +375,7 @@
 
   <script>
     // ✅ Apps Script 배포 후 아래 URL을 교체하세요
-    const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+    const SCRIPT_URL = 'https://script.google.com/a/macros/sentbe.com/s/AKfycbx8-ufiWuaaVlkVMAnO5_xyabZdcsQcnFy_zMw-kTTO_J9jDokoLxaFyx90eFIyvgQv/exec';
     const MAX_NEEDS = 5;
 
     const list = document.getElementById('needsList');
@@ -417,7 +418,7 @@
 
       if (!tools) { alert('사용 중인 AI 툴을 입력해주세요.'); return; }
       if (needs.length === 0) { alert('AI로 해결하고 싶은 문제를 최소 1개 입력해주세요.'); return; }
-      if (!email || !email.includes('@')) { alert('올바른 이메일 주소를 입력해주세요.'); return; }
+      if (!email || !email.endsWith('@sentbe.com')) { alert('sentbe.com 이메일 주소만 제출할 수 있습니다.'); return; }
 
       btn.disabled = true;
       btn.textContent = '제출 중...';
