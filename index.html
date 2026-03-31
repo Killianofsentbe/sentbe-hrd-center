@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 툴 사용 현황 및 니즈 조사 | SentBe HRD</title>
+  <link rel="stylesheet" href="sentbe-design-system.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--color-g100, #F7F8FB);
+      color: var(--color-g900, #1A1A1A);
+      min-height: 100vh;
+      padding: 48px 16px 80px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      text-decoration: none;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      background: var(--color-sb550, #1462FC);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-sb550, #1462FC);
+      letter-spacing: -0.3px;
+    }
+
+    .header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--color-g900, #1A1A1A);
+      line-height: 1.4;
+      letter-spacing: -0.4px;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 14px;
+      color: var(--color-g500, #525357);
+      line-height: 1.7;
+    }
+
+    /* Card */
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.05);
+    }
+
+    /* Form */
+    .form-group {
+      margin-bottom: 28px;
+    }
+
+    .form-group:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-g800, #2A2A2E);
+      margin-bottom: 6px;
+      letter-spacing: -0.1px;
+    }
+
+    .form-label .req {
+      color: var(--color-r600, #F91C1C);
+      margin-left: 3px;
+    }
+
+    .form-hint {
+      font-size: 12px;
+      color: var(--color-g450, #797B7D);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--color-g250, #E3E6EB);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--color-g900, #1A1A1A);
+      background: #fff;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      -webkit-appearance: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--color-sb550, #1462FC);
+      box-shadow: 0 0 0 3px rgba(20, 98, 252, 0.08);
+    }
+
+    .form-input::placeholder {
+      color: var(--color-g350, #C7C9CD);
+    }
+
+    /* Needs */
+    .needs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .need-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .need-row .form-input {
+      flex: 1;
+    }
+
+    .btn-remove {
+      flex-shrink: 0;
+      width: 38px;
+      height: 38px;
+      border: 1.5px solid var(--color-g250, #E3E6EB);
+      border-radius: 9px;
+      background: #fff;
+      color: var(--color-g400, #9D9FA1);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+    }
+
+    .btn-remove:hover {
+      border-color: var(--color-r400, #F88C8C);
+      color: var(--color-r600, #F91C1C);
+      background: var(--color-r150, #FBF1F1);
+    }
+
+    .btn-add {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 10px;
+      padding: 8px 14px;
+      border: 1.5px dashed var(--color-sb300, #92B6FE);
+      border-radius: 8px;
+      background: var(--color-sb100, #F4F7FD);
+      color: var(--color-sb550, #1462FC);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .btn-add:hover {
+      background: var(--color-sb150, #EBF2FE);
+      border-color: var(--color-sb550, #1462FC);
+    }
+
+    .btn-add:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--color-g150, #F0F2F7);
+      margin: 28px 0;
+    }
+
+    /* Submit */
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--color-sb550, #1462FC);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 28px;
+      letter-spacing: -0.2px;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .btn-submit:hover { background: var(--color-sb600, #0156FC); }
+    .btn-submit:active { transform: scale(0.99); }
+    .btn-submit:disabled {
+      background: var(--color-g300, #D8DADF);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Error */
+    .error-msg {
+      display: none;
+      margin-top: 12px;
+      padding: 12px 14px;
+      background: var(--color-r150, #FBF1F1);
+      border: 1px solid var(--color-r300, #FDBDBD);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--color-r700, #D90B0B);
+      line-height: 1.5;
+    }
+
+    .error-msg.show { display: block; }
+
+    /* Success */
+    .success {
+      display: none;
+      text-align: center;
+      padding: 40px 24px;
+    }
+
+    .success.show { display: block; }
+
+    .success-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--color-gr150, #EEF8F3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 18px;
+    }
+
+    .success h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--color-g900);
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+
+    .success p {
+      font-size: 13px;
+      color: var(--color-g500);
+      line-height: 1.7;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 12px;
+      color: var(--color-g400, #9D9FA1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="header">
+      <a class="logo" href="#">
+        <div class="logo-mark">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 9.5L7.5 13L14 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="logo-text">SentBe HRD</span>
+      </a>
+      <h1>AI 툴 사용 현황 및 니즈 조사</h1>
+      <p>여러분이 사용 중인 AI 툴과<br>앞으로 AI로 해결하고 싶은 문제를 알려주세요.<br>수집된 내용은 사내 AI 교육 커리큘럼 설계에 활용됩니다.</p>
+    </div>
+
+    <div class="card">
+      <form id="surveyForm" novalidate>
+
+        <!-- Q1 -->
+        <div class="form-group">
+          <label class="form-label" for="tools">
+            사용 중인 AI 툴<span class="req">*</span>
+          </label>
+          <div class="form-hint">현재 업무에서 사용 중인 AI 툴을 모두 입력해주세요.</div>
+          <input
+            type="text"
+            id="tools"
+            class="form-input"
+            placeholder="예: Claude, ChatGPT, Gemini"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Q2 -->
+        <div class="form-group">
+          <label class="form-label">
+            AI로 해결하고 싶은 문제 / 알고 싶은 AI 지식<span class="req">*</span>
+          </label>
+          <div class="form-hint">최대 5개까지 입력할 수 있습니다. 항목 추가 버튼으로 여러 개 작성 가능합니다.</div>
+          <div class="needs-list" id="needsList">
+            <div class="need-row">
+              <input type="text" class="form-input need-input" placeholder="예: 회의록 자동화" />
+            </div>
+          </div>
+          <button type="button" class="btn-add" id="btnAdd">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            항목 추가
+          </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Q3 -->
+        <div class="form-group">
+          <label class="form-label" for="email">
+            이메일 주소<span class="req">*</span>
+          </label>
+          <input
+            type="email"
+            id="email"
+            class="form-input"
+            placeholder="name@sentbe.com"
+            autocomplete="email"
+          />
+        </div>
+
+        <button type="submit" class="btn-submit" id="btnSubmit">제출하기</button>
+        <div class="error-msg" id="errorMsg">제출 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.</div>
+
+      </form>
+
+      <div class="success" id="success">
+        <div class="success-icon">
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+            <path d="M5 13.5L10.5 19L21 8" stroke="#079F78" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2>응답이 제출되었습니다!</h2>
+        <p>소중한 의견 감사합니다.<br>수집된 내용은 AI 교육 커리큘럼 설계에 반영됩니다.</p>
+      </div>
+    </div>
+
+    <div class="footer">© 2026 SentBe HRD &nbsp;·&nbsp; 본 설문은 내부 교육 목적으로만 사용됩니다</div>
+  </div>
+
+  <script>
+    // ✅ Apps Script 배포 후 아래 URL을 교체하세요
+    const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+    const MAX_NEEDS = 5;
+
+    const list = document.getElementById('needsList');
+    const btnAdd = document.getElementById('btnAdd');
+
+    btnAdd.addEventListener('click', () => {
+      const rows = list.querySelectorAll('.need-row');
+      if (rows.length >= MAX_NEEDS) return;
+
+      const row = document.createElement('div');
+      row.className = 'need-row';
+      row.innerHTML = `
+        <input type="text" class="form-input need-input" placeholder="추가 항목" />
+        <button type="button" class="btn-remove" aria-label="삭제">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      `;
+      row.querySelector('.btn-remove').addEventListener('click', () => {
+        row.remove();
+        btnAdd.disabled = list.querySelectorAll('.need-row').length >= MAX_NEEDS;
+      });
+      list.appendChild(row);
+      btnAdd.disabled = list.querySelectorAll('.need-row').length >= MAX_NEEDS;
+      row.querySelector('input').focus();
+    });
+
+    document.getElementById('surveyForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const errorMsg = document.getElementById('errorMsg');
+      const btn = document.getElementById('btnSubmit');
+
+      // Validation
+      const tools = document.getElementById('tools').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const needInputs = list.querySelectorAll('.need-input');
+      const needs = Array.from(needInputs).map(i => i.value.trim()).filter(Boolean);
+
+      if (!tools) { alert('사용 중인 AI 툴을 입력해주세요.'); return; }
+      if (needs.length === 0) { alert('AI로 해결하고 싶은 문제를 최소 1개 입력해주세요.'); return; }
+      if (!email || !email.includes('@')) { alert('올바른 이메일 주소를 입력해주세요.'); return; }
+
+      btn.disabled = true;
+      btn.textContent = '제출 중...';
+      errorMsg.classList.remove('show');
+
+      try {
+        // no-cors: 응답 본문 읽기 불가하지만 요청은 정상 전송됨
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tools, needs, email })
+        });
+
+        document.getElementById('surveyForm').style.display = 'none';
+        document.getElementById('success').classList.add('show');
+      } catch {
+        errorMsg.classList.add('show');
+        btn.disabled = false;
+        btn.textContent = '제출하기';
+      }
+    });
+  </script>
+</body>
+</html>
