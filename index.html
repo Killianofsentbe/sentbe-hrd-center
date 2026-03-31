@@ -25,6 +25,40 @@
     .header {
       text-align: center;
       margin-bottom: 32px;
+      position: relative;
+    }
+
+    /* Language toggle */
+    .lang-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      background: var(--color-g200, #E9ECF1);
+      border-radius: 8px;
+      padding: 3px;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+
+    .lang-btn {
+      padding: 5px 11px;
+      border: none;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      background: transparent;
+      color: var(--color-g450, #797B7D);
+      transition: all 0.15s;
+      letter-spacing: 0.2px;
+    }
+
+    .lang-btn.active {
+      background: #fff;
+      color: var(--color-g900, #1A1A1A);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
     .logo {
@@ -286,6 +320,12 @@
   <div class="container">
 
     <div class="header">
+      <!-- Language toggle -->
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="btnKo" onclick="setLang('ko')">KOR</button>
+        <button class="lang-btn" id="btnEn" onclick="setLang('en')">ENG</button>
+      </div>
+
       <a class="logo" href="#">
         <div class="logo-mark">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -294,8 +334,8 @@
         </div>
         <span class="logo-text">SentBe HRD</span>
       </a>
-      <h1>AI 툴 사용 현황 및 니즈 조사</h1>
-      <p>여러분이 사용 중인 AI 툴과<br>앞으로 AI로 해결하고 싶은 문제를 알려주세요.<br>수집된 내용은 사내 AI 교육 커리큘럼 설계에 활용됩니다.</p>
+      <h1 data-i18n="title"></h1>
+      <p data-i18n="desc"></p>
     </div>
 
     <div class="card">
@@ -304,14 +344,14 @@
         <!-- Q1 -->
         <div class="form-group">
           <label class="form-label" for="tools">
-            사용 중인 AI 툴<span class="req">*</span>
+            <span data-i18n="q1Label"></span><span class="req">*</span>
           </label>
-          <div class="form-hint">현재 업무에서 사용 중인 AI 툴을 모두 입력해주세요.</div>
+          <div class="form-hint" data-i18n="q1Hint"></div>
           <input
             type="text"
             id="tools"
             class="form-input"
-            placeholder="예: Claude, ChatGPT, Gemini"
+            data-i18n-placeholder="q1Placeholder"
             autocomplete="off"
           />
         </div>
@@ -321,19 +361,19 @@
         <!-- Q2 -->
         <div class="form-group">
           <label class="form-label">
-            AI로 해결하고 싶은 문제 / 알고 싶은 AI 지식<span class="req">*</span>
+            <span data-i18n="q2Label"></span><span class="req">*</span>
           </label>
-          <div class="form-hint">최대 5개까지 입력할 수 있습니다. 항목 추가 버튼으로 여러 개 작성 가능합니다.</div>
+          <div class="form-hint" data-i18n="q2Hint"></div>
           <div class="needs-list" id="needsList">
             <div class="need-row">
-              <input type="text" class="form-input need-input" placeholder="예: 회의록 자동화" />
+              <input type="text" class="form-input need-input" data-i18n-placeholder="q2Placeholder" />
             </div>
           </div>
           <button type="button" class="btn-add" id="btnAdd">
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
               <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
             </svg>
-            항목 추가
+            <span data-i18n="q2AddBtn"></span>
           </button>
         </div>
 
@@ -342,10 +382,11 @@
         <!-- Q3 -->
         <div class="form-group">
           <label class="form-label" for="email">
-            이메일 주소<span class="req">*</span>
+            <span data-i18n="q3Label"></span><span class="req">*</span>
           </label>
           <div class="form-hint">
-            <span style="color:var(--color-sb550,#1462FC);font-weight:600;">@sentbe.com</span> 이메일만 제출 가능합니다.
+            <span style="color:var(--color-sb550,#1462FC);font-weight:600;">@sentbe.com</span>
+            <span data-i18n="q3Hint"></span>
           </div>
           <input
             type="email"
@@ -357,8 +398,8 @@
           />
         </div>
 
-        <button type="submit" class="btn-submit" id="btnSubmit">제출하기</button>
-        <div class="error-msg" id="errorMsg">제출 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.</div>
+        <button type="submit" class="btn-submit" id="btnSubmit" data-i18n="submitBtn"></button>
+        <div class="error-msg" id="errorMsg" data-i18n="errorMsg"></div>
 
       </form>
 
@@ -368,31 +409,120 @@
             <path d="M5 13.5L10.5 19L21 8" stroke="#079F78" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <h2>응답이 제출되었습니다!</h2>
-        <p>소중한 의견 감사합니다.<br>수집된 내용은 AI 교육 커리큘럼 설계에 반영됩니다.</p>
+        <h2 data-i18n="successTitle"></h2>
+        <p data-i18n="successDesc"></p>
       </div>
     </div>
 
-    <div class="footer">© 2026 SentBe HRD &nbsp;·&nbsp; 본 설문은 내부 교육 목적으로만 사용됩니다</div>
+    <div class="footer" data-i18n="footer"></div>
   </div>
 
   <script>
-    // ✅ Apps Script 배포 후 아래 URL을 교체하세요
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8-ufiWuaaVlkVMAnO5_xyabZdcsQcnFy_zMw-kTTO_J9jDokoLxaFyx90eFIyvgQv/exec';
     const MAX_NEEDS = 5;
 
+    // ── Translations ──────────────────────────────────────────
+    const T = {
+      ko: {
+        pageTitle:      'AI 툴 사용 현황 및 니즈 조사 | SentBe HRD',
+        title:          'AI 툴 사용 현황 및 니즈 조사',
+        desc:           '여러분이 사용 중인 AI 툴과\n앞으로 AI로 해결하고 싶은 문제를 알려주세요.\n수집된 내용은 사내 AI 교육 커리큘럼 설계에 활용됩니다.',
+        q1Label:        '사용 중인 AI 툴',
+        q1Hint:         '현재 업무에서 사용 중인 AI 툴을 모두 입력해주세요.',
+        q1Placeholder:  '예: Claude, ChatGPT, Gemini',
+        q2Label:        'AI로 해결하고 싶은 문제 / 알고 싶은 AI 지식',
+        q2Hint:         '최대 5개까지 입력할 수 있습니다. 항목 추가 버튼으로 여러 개 작성 가능합니다.',
+        q2Placeholder:  '예: 회의록 자동화',
+        q2AddedPlaceholder: '추가 항목',
+        q2AddBtn:       '항목 추가',
+        q3Label:        '이메일 주소',
+        q3Hint:         ' 이메일만 제출 가능합니다.',
+        submitBtn:      '제출하기',
+        submitting:     '제출 중...',
+        errorMsg:       '제출 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+        successTitle:   '응답이 제출되었습니다!',
+        successDesc:    '소중한 의견 감사합니다.\n수집된 내용은 AI 교육 커리큘럼 설계에 반영됩니다.',
+        footer:         '© 2026 SentBe HRD · 본 설문은 내부 교육 목적으로만 사용됩니다',
+        alertTools:     '사용 중인 AI 툴을 입력해주세요.',
+        alertNeeds:     'AI로 해결하고 싶은 문제를 최소 1개 입력해주세요.',
+        alertEmail:     'sentbe.com 이메일 주소만 제출할 수 있습니다.',
+      },
+      en: {
+        pageTitle:      'AI Tool Usage & Needs Survey | SentBe HRD',
+        title:          'AI Tool Usage & Needs Survey',
+        desc:           'Please share the AI tools you use\nand what problems you\'d like to solve with AI.\nYour responses will be used to design our internal AI training curriculum.',
+        q1Label:        'AI tools you currently use',
+        q1Hint:         'List all AI tools you use in your work.',
+        q1Placeholder:  'e.g. Claude, ChatGPT, Gemini',
+        q2Label:        'Problems to solve / AI knowledge you want',
+        q2Hint:         'You can add up to 5 items using the button below.',
+        q2Placeholder:  'e.g. Meeting note automation',
+        q2AddedPlaceholder: 'Add another item',
+        q2AddBtn:       'Add item',
+        q3Label:        'Email address',
+        q3Hint:         ' email addresses only.',
+        submitBtn:      'Submit',
+        submitting:     'Submitting...',
+        errorMsg:       'Something went wrong. Please try again.',
+        successTitle:   'Response submitted!',
+        successDesc:    'Thank you for your input.\nYour responses will be reflected in our AI training curriculum.',
+        footer:         '© 2026 SentBe HRD · For internal training purposes only',
+        alertTools:     'Please enter the AI tools you use.',
+        alertNeeds:     'Please enter at least one item.',
+        alertEmail:     'Only @sentbe.com email addresses are allowed.',
+      }
+    };
+
+    let currentLang = 'ko';
+
+    function setLang(lang) {
+      currentLang = lang;
+      const t = T[lang];
+
+      // html lang attr & page title
+      document.documentElement.lang = lang;
+      document.title = t.pageTitle;
+
+      // toggle button states
+      document.getElementById('btnKo').classList.toggle('active', lang === 'ko');
+      document.getElementById('btnEn').classList.toggle('active', lang === 'en');
+
+      // text nodes
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (t[key] !== undefined) {
+          el.innerHTML = t[key].replace(/\n/g, '<br>');
+        }
+      });
+
+      // placeholders
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.dataset.i18nPlaceholder;
+        if (t[key] !== undefined) el.placeholder = t[key];
+      });
+
+      // dynamically added need-row placeholders
+      document.querySelectorAll('.need-input:not(:first-of-type)').forEach(el => {
+        el.placeholder = t.q2AddedPlaceholder;
+      });
+    }
+
+    // init
+    setLang('ko');
+
+    // ── Needs list ────────────────────────────────────────────
     const list = document.getElementById('needsList');
     const btnAdd = document.getElementById('btnAdd');
 
     btnAdd.addEventListener('click', () => {
-      const rows = list.querySelectorAll('.need-row');
-      if (rows.length >= MAX_NEEDS) return;
+      if (list.querySelectorAll('.need-row').length >= MAX_NEEDS) return;
 
       const row = document.createElement('div');
       row.className = 'need-row';
       row.innerHTML = `
-        <input type="text" class="form-input need-input" placeholder="추가 항목" />
-        <button type="button" class="btn-remove" aria-label="삭제">
+        <input type="text" class="form-input need-input"
+          placeholder="${T[currentLang].q2AddedPlaceholder}" />
+        <button type="button" class="btn-remove" aria-label="Remove">
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
             <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
           </svg>
@@ -407,28 +537,28 @@
       row.querySelector('input').focus();
     });
 
+    // ── Submit ────────────────────────────────────────────────
     document.getElementById('surveyForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
+      const t = T[currentLang];
       const errorMsg = document.getElementById('errorMsg');
       const btn = document.getElementById('btnSubmit');
 
-      // Validation
       const tools = document.getElementById('tools').value.trim();
       const email = document.getElementById('email').value.trim();
-      const needInputs = list.querySelectorAll('.need-input');
-      const needs = Array.from(needInputs).map(i => i.value.trim()).filter(Boolean);
+      const needs = Array.from(list.querySelectorAll('.need-input'))
+        .map(i => i.value.trim()).filter(Boolean);
 
-      if (!tools) { alert('사용 중인 AI 툴을 입력해주세요.'); return; }
-      if (needs.length === 0) { alert('AI로 해결하고 싶은 문제를 최소 1개 입력해주세요.'); return; }
-      if (!email || !email.endsWith('@sentbe.com')) { alert('sentbe.com 이메일 주소만 제출할 수 있습니다.'); return; }
+      if (!tools)                            { alert(t.alertTools); return; }
+      if (needs.length === 0)                { alert(t.alertNeeds); return; }
+      if (!email.endsWith('@sentbe.com'))    { alert(t.alertEmail); return; }
 
       btn.disabled = true;
-      btn.textContent = '제출 중...';
+      btn.textContent = t.submitting;
       errorMsg.classList.remove('show');
 
       try {
-        // no-cors: 응답 본문 읽기 불가하지만 요청은 정상 전송됨
         await fetch(SCRIPT_URL, {
           method: 'POST',
           mode: 'no-cors',
@@ -441,7 +571,7 @@
       } catch {
         errorMsg.classList.add('show');
         btn.disabled = false;
-        btn.textContent = '제출하기';
+        btn.textContent = t.submitBtn;
       }
     });
   </script>
