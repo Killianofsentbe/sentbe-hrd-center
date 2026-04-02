@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="page-title">Claude Code 슬래시 명령어 모음 | SentBe HRD</title>
+  <link rel="stylesheet" href="sentbe-design-system.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── 라이트 모드 토큰 ── */
+    :root,
+    [data-theme="light"] {
+      --page-bg:       var(--color-g100, #F7F8FB);
+      --surface:       #ffffff;
+      --surface2:      var(--color-g50, #FBFCFE);
+      --border:        var(--color-g200, #E9ECF1);
+      --border-accent: var(--color-sb550, #1462FC);
+      --text-primary:  var(--color-g900, #1A1A1A);
+      --text-secondary:var(--color-g500, #525357);
+      --text-muted:    var(--color-g400, #9D9FA1);
+      --accent:        var(--color-sb550, #1462FC);
+      --accent-soft:   var(--color-sb100, #F4F7FD);
+      --cmd-bg:        var(--color-g750, #303035);
+      --cmd-text:      var(--color-sb300, #92B6FE);
+      --tag-bg:        var(--color-g800, #2A2A2E);
+      --tag-text:      var(--color-g100, #F7F8FB);
+      --tip-bg:        var(--color-sb100, #F4F7FD);
+      --tip-border:    var(--color-sb550, #1462FC);
+      --summary-bg:    #ffffff;
+      --row-border:    var(--color-g150, #F0F2F7);
+      --toggle-bg:     var(--color-g200, #E9ECF1);
+      --toggle-active-bg:   #ffffff;
+      --toggle-active-text: var(--color-g900, #1A1A1A);
+      --toggle-inactive:    var(--color-g450, #797B7D);
+      --section-border:     var(--color-sb550, #1462FC);
+      --shadow-card: 0 1px 2px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-hover: 0 4px 20px rgba(0,0,0,0.10);
+      --cta-bg:        var(--color-sb550, #1462FC);
+      --cta-text:      #ffffff;
+    }
+
+    /* ── 다크 모드 토큰 ── */
+    [data-theme="dark"] {
+      --page-bg:       #0d0d10;
+      --surface:       #16161c;
+      --surface2:      #1e1e28;
+      --border:        #2a2a38;
+      --border-accent: var(--color-sb400, #6196FD);
+      --text-primary:  #e8e6f0;
+      --text-secondary:#9997b8;
+      --text-muted:    #5a5870;
+      --accent:        var(--color-sb400, #6196FD);
+      --accent-soft:   #111828;
+      --cmd-bg:        #111118;
+      --cmd-text:      var(--color-sb300, #92B6FE);
+      --tag-bg:        #1e1e2e;
+      --tag-text:      #c8c6e0;
+      --tip-bg:        #111828;
+      --tip-border:    var(--color-sb400, #6196FD);
+      --summary-bg:    #16161c;
+      --row-border:    #222230;
+      --toggle-bg:     #2a2a38;
+      --toggle-active-bg:   #3a3a4e;
+      --toggle-active-text: #e8e6f0;
+      --toggle-inactive:    #555568;
+      --section-border:     var(--color-sb400, #6196FD);
+      --shadow-card: 0 1px 2px rgba(0,0,0,0.3), 0 4px 20px rgba(0,0,0,0.25);
+      --shadow-hover: 0 4px 24px rgba(0,0,0,0.4);
+      --cta-bg:        var(--color-sb550, #1462FC);
+      --cta-text:      #ffffff;
+    }
+
+    body {
+      font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--page-bg);
+      color: var(--text-primary);
+      padding: 48px 20px 80px;
+      line-height: 1.65;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .container {
+      max-width: 740px;
+      margin: 0 auto;
+    }
+
+    /* ── 토글 컨트롤 ── */
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 36px;
+    }
+
+    .toggle-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      background: var(--toggle-bg);
+      border-radius: 8px;
+      padding: 3px;
+    }
+
+    .toggle-btn {
+      padding: 5px 12px;
+      border: none;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      background: transparent;
+      color: var(--toggle-inactive);
+      transition: all 0.15s;
+      letter-spacing: 0.2px;
+    }
+
+    .toggle-btn.active {
+      background: var(--toggle-active-bg);
+      color: var(--toggle-active-text);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+
+    /* ── 헤더 ── */
+    header {
+      text-align: center;
+      margin-bottom: 44px;
+    }
+
+    .logo-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: var(--accent);
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .logo-mark svg { display: block; }
+
+    .badge {
+      display: inline-block;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid var(--border-accent);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      letter-spacing: 0.04em;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+      line-height: 1.3;
+    }
+
+    h1 .highlight {
+      color: var(--accent);
+    }
+
+    .subtitle {
+      font-size: 0.97rem;
+      color: var(--text-secondary);
+    }
+
+    /* ── 섹션 ── */
+    .section {
+      margin-bottom: 32px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--section-border);
+    }
+
+    .section-icon { font-size: 1.2rem; }
+
+    .section-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: 0.01em;
+    }
+
+    .cards {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: 14px;
+      padding: 16px 20px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      box-shadow: var(--shadow-card);
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-hover);
+      border-color: var(--border-accent);
+    }
+
+    .cmd {
+      display: inline-block;
+      background: var(--cmd-bg);
+      color: var(--cmd-text);
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 8px;
+      white-space: nowrap;
+      min-width: 108px;
+      text-align: center;
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+    }
+
+    .cmd.star {
+      color: var(--color-lo300, #FFC476);
+    }
+
+    .card-body { flex: 1; }
+
+    .card-desc {
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .card-tip {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .tip-box {
+      background: var(--tip-bg);
+      border-left: 3px solid var(--tip-border);
+      border-radius: 0 10px 10px 0;
+      padding: 12px 16px;
+      margin-top: 10px;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .tip-box strong {
+      color: var(--accent);
+    }
+
+    /* ── 요약 테이블 ── */
+    .summary-table {
+      background: var(--summary-bg);
+      border-radius: 16px;
+      padding: 28px;
+      border: 1px solid var(--border);
+      margin-top: 40px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .summary-table h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      letter-spacing: -0.3px;
+    }
+
+    .summary-table p {
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      margin-bottom: 20px;
+    }
+
+    .summary-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--row-border);
+    }
+
+    .summary-row:last-of-type {
+      border-bottom: none;
+    }
+
+    .summary-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 72px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+
+    .summary-cmds {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    .cta {
+      background: var(--cta-bg);
+      color: var(--cta-text);
+      text-align: center;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      margin-top: 20px;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── 푸터 ── */
+    footer {
+      text-align: center;
+      margin-top: 48px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 컨트롤 -->
+  <div class="controls">
+    <!-- 테마 토글 -->
+    <div class="toggle-group" id="themeToggle">
+      <button class="toggle-btn active" data-theme-btn="light" onclick="setTheme('light')">☀️ Light</button>
+      <button class="toggle-btn" data-theme-btn="dark" onclick="setTheme('dark')">🌙 Dark</button>
+    </div>
+    <!-- 언어 토글 -->
+    <div class="toggle-group" id="langToggle">
+      <button class="toggle-btn active" data-lang-btn="ko" onclick="setLang('ko')">KOR</button>
+      <button class="toggle-btn" data-lang-btn="en" onclick="setLang('en')">ENG</button>
+    </div>
+  </div>
+
+  <!-- 헤더 -->
+  <header>
+    <div class="logo-mark">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M3 10C3 6.13 6.13 3 10 3s7 3.13 7 7-3.13 7-7 7-7-3.13-7-7z" fill="white" fill-opacity="0.3"/>
+        <path d="M7 10l2 2 4-4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="badge">Claude Code</div>
+    <h1>
+      <span data-i18n="hero-pre">아직 </span><span class="highlight">/clear</span><span data-i18n="hero-post">만 쓰세요?</span>
+    </h1>
+    <p class="subtitle" data-i18n="subtitle">진짜 쓸모있는 슬래시 명령어 모음</p>
+  </header>
+
+  <!-- 세션 관리 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">🔄</span>
+      <span class="section-title" data-i18n="sec-session">세션 관리</span>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <span class="cmd star">/compact</span>
+        <div class="card-body">
+          <div class="card-desc" data-i18n="compact-desc">대화 맥락을 압축해서 컨텍스트 절약</div>
+          <div class="card-tip" data-i18n="compact-tip">/clear는 대화를 통째로 날려요. /compact는 핵심 맥락만 남기고 압축해요.</div>
+        </div>
+      </div>
+      <div class="card">
+        <span class="cmd">/resume</span>
+        <div class="card-body">
+          <div class="card-desc" data-i18n="resume-desc">터미널 껐다 켜도 이전 대화 이어가기</div>
+          <div class="card-tip" data-i18n="resume-tip">세션 복구 · 대화 이어하기</div>
+        </div>
+      </div>
+      <div class="card">
+        <span class="cmd">/context</span>
+        <div class="card-body">
+          <div class="card-desc" data-i18n="context-desc">현재 컨텍스트 사용량 확인</div>
+          <div class="card-tip" data-i18n="context-tip">토큰 확인 · 용량 관리</div>
+        </div>
+      </div>
+    </div>
+    <div class="tip-box">💡 <strong data-i18n="tip-session-strong">/clear 대신 /compact를 쓰세요</strong> — <span data-i18n="tip-session-body">맥락을 유지하면서 공간을 확보할 수 있어요.</span></div>
+  </div>
+
+  <!-- 작업 관리 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">📋</span>
+      <span class="section-title" data-i18n="sec-task">작업 관리</span>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <span class="cmd star">/plan</span>
+        <div class="card-body">
+          <div class="card-desc" data-i18n="plan-desc">복잡한 작업 전 실행 계획 수립</div>
+          <div class="card-tip" data-i18n="plan-tip">바로 '코드 짜줘'라고 하면 삽질할 수 있어요. /plan을 켜면 실행 없이 계획부터 세워요.</div>
+        </div>
+      </div>
+      <div class="card">
+        <span class="cmd">/diff</span>
+        <div class="card-body">
+          <div class="card-desc" data-i18n="diff-desc">커밋 전 변경 내역 미리보기</div>
+          <div class="card-tip" data-i18n="diff-tip">커밋 전에 어떤 코드가 바뀌었는지 확인해요.</div>
+        </div>
+      </div>
+      <div class="card">
+        <span class="cmd">/cost</span>
+        <div class="card-body">
+          <div class="card-desc" data-i18n="cost-desc">세션별 토큰 사용량/비용 확인</div>
+          <div class="card-tip" data-i18n="cost-tip">Input / Output / Total 비용을 실시간으로 확인해요.</div>
+        </div>
+      </div>
+    </div>
+    <div class="tip-box">💡 <strong data-i18n="tip-task-strong">먼저 계획, 그 다음에 실행</strong> — <span data-i18n="tip-task-body">/plan으로 검토 후 승인하면 실수가 줄어요.</span></div>
+  </div>
+
+  <!-- 성능 조절 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">⚡</span>
+      <span class="section-title" data-i18n="sec-perf">성능 조절</span>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <span class="cmd">/fast</span>
+        <div class="card-body">
+          <div class="card-desc" data-i18n="fast-desc">빠른 응답 모드 토글</div>
+          <div class="card-tip" data-i18n="fast-tip">간단한 작업은 fast 모드로 빠르게 처리해요.</div>
+        </div>
+      </div>
+      <div class="card">
+        <span class="cmd">/effort</span>
+        <div class="card-body">
+          <div class="card-desc" data-i18n="effort-desc">사고 깊이 조절 (low / medium / high)</div>
+          <div class="card-tip" data-i18n="effort-tip">복잡한 문제엔 high, 간단한 질문엔 low로 설정해요.</div>
+        </div>
+      </div>
+      <div class="card">
+        <span class="cmd">/model</span>
+        <div class="card-body">
+          <div class="card-desc" data-i18n="model-desc">모델 직접 선택 (Haiku / Sonnet / Opus)</div>
+          <div class="card-tip" data-i18n="model-tip">작업 난이도에 맞게 모델을 골라 비용을 최적화해요.</div>
+        </div>
+      </div>
+    </div>
+    <div class="tip-box">💡 <strong data-i18n="tip-perf-strong">간단한 건 fast, 복잡한 건 high effort</strong> — <span data-i18n="tip-perf-body">상황에 맞게 조절하면 비용과 속도 모두 잡을 수 있어요.</span></div>
+  </div>
+
+  <!-- 설정 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">⚙️</span>
+      <span class="section-title" data-i18n="sec-settings">설정</span>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <span class="cmd">/memory</span>
+        <div class="card-body">
+          <div class="card-desc" data-i18n="memory-desc">CLAUDE.md 프로젝트 규칙 직접 편집</div>
+          <div class="card-tip" data-i18n="memory-tip">프로젝트, 스타일, 톤앤매너, 금지 사항 등을 저장해 매번 설명하지 않아도 돼요.</div>
+        </div>
+      </div>
+      <div class="card">
+        <span class="cmd">/init</span>
+        <div class="card-body">
+          <div class="card-desc" data-i18n="init-desc">프로젝트 파일 분석 후 CLAUDE.md 자동 생성</div>
+          <div class="card-tip" data-i18n="init-tip">빈 문서 → CLAUDE.md를 자동으로 만들어줘요.</div>
+        </div>
+      </div>
+    </div>
+    <div class="tip-box">💡 <strong data-i18n="tip-settings-strong">매번 설명 안 해도 돼요</strong> — <span data-i18n="tip-settings-body">/memory로 한번 설정해두면 Claude가 기억해요.</span></div>
+  </div>
+
+  <!-- 유틸 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">🧰</span>
+      <span class="section-title" data-i18n="sec-util">유틸</span>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <span class="cmd">/copy</span>
+        <div class="card-body">
+          <div class="card-desc" data-i18n="copy-desc">마지막 응답을 클립보드에 복사</div>
+          <div class="card-tip" data-i18n="copy-tip">드래그 없이 바로 복사해요.</div>
+        </div>
+      </div>
+      <div class="card">
+        <span class="cmd">/export</span>
+        <div class="card-body">
+          <div class="card-desc" data-i18n="export-desc">전체 대화를 파일로 내보내기</div>
+          <div class="card-tip" data-i18n="export-tip">대화 전체를 저장하고 싶을 때 사용해요.</div>
+        </div>
+      </div>
+      <div class="card">
+        <span class="cmd">/doctor</span>
+        <div class="card-body">
+          <div class="card-desc" data-i18n="doctor-desc">설치 상태 자동 진단</div>
+          <div class="card-tip" data-i18n="doctor-tip">뭔가 안 될 때 /doctor부터 실행하세요.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 요약 테이블 -->
+  <div class="summary-table">
+    <h2 data-i18n="summary-title">한 장으로 정리!</h2>
+    <p data-i18n="summary-sub">Claude Code 명령어, 이것만 기억하세요!</p>
+
+    <div class="summary-row">
+      <div class="summary-label"><span>🔄</span> <span data-i18n="sum-session">세션</span></div>
+      <div class="summary-cmds">
+        <span class="tag">/compact</span>
+        <span class="tag">/resume</span>
+        <span class="tag">/context</span>
+      </div>
+    </div>
+    <div class="summary-row">
+      <div class="summary-label"><span>📋</span> <span data-i18n="sum-task">작업</span></div>
+      <div class="summary-cmds">
+        <span class="tag">/plan</span>
+        <span class="tag">/diff</span>
+        <span class="tag">/cost</span>
+      </div>
+    </div>
+    <div class="summary-row">
+      <div class="summary-label"><span>⚡</span> <span data-i18n="sum-perf">성능</span></div>
+      <div class="summary-cmds">
+        <span class="tag">/fast</span>
+        <span class="tag">/effort</span>
+        <span class="tag">/model</span>
+      </div>
+    </div>
+    <div class="summary-row">
+      <div class="summary-label"><span>⚙️</span> <span data-i18n="sum-settings">설정</span></div>
+      <div class="summary-cmds">
+        <span class="tag">/memory</span>
+        <span class="tag">/init</span>
+      </div>
+    </div>
+    <div class="summary-row">
+      <div class="summary-label"><span>🧰</span> <span data-i18n="sum-util">유틸</span></div>
+      <div class="summary-cmds">
+        <span class="tag">/copy</span>
+        <span class="tag">/export</span>
+        <span class="tag">/doctor</span>
+      </div>
+    </div>
+
+    <div class="cta" data-i18n="cta">📌 저장해두고 필요할 때 꺼내보세요</div>
+  </div>
+
+  <footer>
+    <p data-i18n="footer">SentBe HRD · AI 교육자료 · <a href="index.html" data-i18n="footer-link">허브로 돌아가기</a></p>
+  </footer>
+
+</div>
+
+<script>
+  /* ── 다국어 사전 ── */
+  const i18n = {
+    ko: {
+      'page-title':         'Claude Code 슬래시 명령어 모음 | SentBe HRD',
+      'hero-pre':           '아직 ',
+      'hero-post':          '만 쓰세요?',
+      'subtitle':           '진짜 쓸모있는 슬래시 명령어 모음',
+      'sec-session':        '세션 관리',
+      'compact-desc':       '대화 맥락을 압축해서 컨텍스트 절약',
+      'compact-tip':        '/clear는 대화를 통째로 날려요. /compact는 핵심 맥락만 남기고 압축해요.',
+      'resume-desc':        '터미널 껐다 켜도 이전 대화 이어가기',
+      'resume-tip':         '세션 복구 · 대화 이어하기',
+      'context-desc':       '현재 컨텍스트 사용량 확인',
+      'context-tip':        '토큰 확인 · 용량 관리',
+      'tip-session-strong': '/clear 대신 /compact를 쓰세요',
+      'tip-session-body':   '맥락을 유지하면서 공간을 확보할 수 있어요.',
+      'sec-task':           '작업 관리',
+      'plan-desc':          '복잡한 작업 전 실행 계획 수립',
+      'plan-tip':           "바로 '코드 짜줘'라고 하면 삽질할 수 있어요. /plan을 켜면 실행 없이 계획부터 세워요.",
+      'diff-desc':          '커밋 전 변경 내역 미리보기',
+      'diff-tip':           '커밋 전에 어떤 코드가 바뀌었는지 확인해요.',
+      'cost-desc':          '세션별 토큰 사용량/비용 확인',
+      'cost-tip':           'Input / Output / Total 비용을 실시간으로 확인해요.',
+      'tip-task-strong':    '먼저 계획, 그 다음에 실행',
+      'tip-task-body':      '/plan으로 검토 후 승인하면 실수가 줄어요.',
+      'sec-perf':           '성능 조절',
+      'fast-desc':          '빠른 응답 모드 토글',
+      'fast-tip':           '간단한 작업은 fast 모드로 빠르게 처리해요.',
+      'effort-desc':        '사고 깊이 조절 (low / medium / high)',
+      'effort-tip':         '복잡한 문제엔 high, 간단한 질문엔 low로 설정해요.',
+      'model-desc':         '모델 직접 선택 (Haiku / Sonnet / Opus)',
+      'model-tip':          '작업 난이도에 맞게 모델을 골라 비용을 최적화해요.',
+      'tip-perf-strong':    '간단한 건 fast, 복잡한 건 high effort',
+      'tip-perf-body':      '상황에 맞게 조절하면 비용과 속도 모두 잡을 수 있어요.',
+      'sec-settings':       '설정',
+      'memory-desc':        'CLAUDE.md 프로젝트 규칙 직접 편집',
+      'memory-tip':         '프로젝트, 스타일, 톤앤매너, 금지 사항 등을 저장해 매번 설명하지 않아도 돼요.',
+      'init-desc':          '프로젝트 파일 분석 후 CLAUDE.md 자동 생성',
+      'init-tip':           '빈 문서 → CLAUDE.md를 자동으로 만들어줘요.',
+      'tip-settings-strong':'매번 설명 안 해도 돼요',
+      'tip-settings-body':  '/memory로 한번 설정해두면 Claude가 기억해요.',
+      'sec-util':           '유틸',
+      'copy-desc':          '마지막 응답을 클립보드에 복사',
+      'copy-tip':           '드래그 없이 바로 복사해요.',
+      'export-desc':        '전체 대화를 파일로 내보내기',
+      'export-tip':         '대화 전체를 저장하고 싶을 때 사용해요.',
+      'doctor-desc':        '설치 상태 자동 진단',
+      'doctor-tip':         '뭔가 안 될 때 /doctor부터 실행하세요.',
+      'summary-title':      '한 장으로 정리!',
+      'summary-sub':        'Claude Code 명령어, 이것만 기억하세요!',
+      'sum-session':        '세션',
+      'sum-task':           '작업',
+      'sum-perf':           '성능',
+      'sum-settings':       '설정',
+      'sum-util':           '유틸',
+      'cta':                '📌 저장해두고 필요할 때 꺼내보세요',
+      'footer':             'SentBe HRD · AI 교육자료 · <a href="index.html" data-i18n="footer-link">허브로 돌아가기</a>',
+      'footer-link':        '허브로 돌아가기',
+    },
+    en: {
+      'page-title':         'Claude Code Slash Commands | SentBe HRD',
+      'hero-pre':           'Still only using ',
+      'hero-post':          '?',
+      'subtitle':           'The actually useful Claude Code slash commands',
+      'sec-session':        'Session',
+      'compact-desc':       'Compress conversation context to save space',
+      'compact-tip':        '/clear wipes everything. /compact keeps the key context and compresses the rest.',
+      'resume-desc':        'Resume a previous conversation after restarting the terminal',
+      'resume-tip':         'Session recovery · Continue a prior chat',
+      'context-desc':       'Check current context window usage',
+      'context-tip':        'Token usage · Capacity management',
+      'tip-session-strong': 'Use /compact instead of /clear',
+      'tip-session-body':   'You keep the context while freeing up space.',
+      'sec-task':           'Task',
+      'plan-desc':          'Build an execution plan before tackling complex tasks',
+      'plan-tip':           'Jumping straight to "write the code" can go sideways. /plan lets Claude plan without executing anything.',
+      'diff-desc':          'Preview changes before committing',
+      'diff-tip':           'See exactly what code changed before you commit.',
+      'cost-desc':          'Check token usage & cost for the session',
+      'cost-tip':           'View Input / Output / Total costs in real time.',
+      'tip-task-strong':    'Plan first, then execute',
+      'tip-task-body':      'Reviewing with /plan before approving reduces mistakes.',
+      'sec-perf':           'Performance',
+      'fast-desc':          'Toggle fast response mode',
+      'fast-tip':           'Use fast mode for simple, quick tasks.',
+      'effort-desc':        'Adjust thinking depth (low / medium / high)',
+      'effort-tip':         'Set high for complex problems, low for quick questions.',
+      'model-desc':         'Pick the model directly (Haiku / Sonnet / Opus)',
+      'model-tip':          'Match the model to the task difficulty to optimize cost.',
+      'tip-perf-strong':    'Fast for simple, high effort for complex',
+      'tip-perf-body':      'Tune both to get the best balance of speed and cost.',
+      'sec-settings':       'Settings',
+      'memory-desc':        'Edit CLAUDE.md project rules directly',
+      'memory-tip':         'Save project rules, style guides, and restrictions so you never have to explain them again.',
+      'init-desc':          'Analyze project files and auto-generate CLAUDE.md',
+      'init-tip':           'Empty project → CLAUDE.md created automatically.',
+      'tip-settings-strong':'No need to explain every time',
+      'tip-settings-body':  'Set it once with /memory and Claude will remember.',
+      'sec-util':           'Utilities',
+      'copy-desc':          'Copy the last response to clipboard',
+      'copy-tip':           'No dragging — copy instantly.',
+      'export-desc':        'Export the entire conversation to a file',
+      'export-tip':         'Use this when you want to save the full conversation.',
+      'doctor-desc':        'Auto-diagnose installation issues',
+      'doctor-tip':         'Something broken? Run /doctor first.',
+      'summary-title':      'Quick Reference',
+      'summary-sub':        'These are the Claude Code commands worth remembering!',
+      'sum-session':        'Session',
+      'sum-task':           'Task',
+      'sum-perf':           'Perf',
+      'sum-settings':       'Settings',
+      'sum-util':           'Utils',
+      'cta':                '📌 Bookmark this and pull it up whenever you need it',
+      'footer':             'SentBe HRD · AI Learning Resources · <a href="index.html" data-i18n="footer-link">Back to Hub</a>',
+      'footer-link':        'Back to Hub',
+    }
+  };
+
+  let currentLang = 'ko';
+  let currentTheme = 'light';
+
+  function applyI18n(lang) {
+    const dict = i18n[lang];
+    document.documentElement.lang = lang;
+    document.title = dict['page-title'];
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key] !== undefined) {
+        el.innerHTML = dict[key];
+      }
+    });
+  }
+
+  function setLang(lang) {
+    currentLang = lang;
+    applyI18n(lang);
+    document.querySelectorAll('[data-lang-btn]').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-lang-btn') === lang);
+    });
+    localStorage.setItem('sb-lang', lang);
+  }
+
+  function setTheme(theme) {
+    currentTheme = theme;
+    document.documentElement.setAttribute('data-theme', theme);
+    document.querySelectorAll('[data-theme-btn]').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-theme-btn') === theme);
+    });
+    localStorage.setItem('sb-theme', theme);
+  }
+
+  /* ── 초기화: 저장된 설정 복원 ── */
+  (function init() {
+    const savedTheme = localStorage.getItem('sb-theme') || 'light';
+    const savedLang  = localStorage.getItem('sb-lang')  || 'ko';
+    setTheme(savedTheme);
+    setLang(savedLang);
+  })();
+</script>
+</body>
+</html>
