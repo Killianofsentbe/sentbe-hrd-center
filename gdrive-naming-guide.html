@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="ko" id="html-root">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Drive 폴더·파일 네이밍 퀵 가이드 v1.0 | SentBe</title>
+  <link rel="stylesheet" href="sentbe-design-system.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Tokens ── */
+    :root {
+      --bg:       #F7F8FB;
+      --surface:  #ffffff;
+      --surface2: #f0f2f7;
+      --border:   #e3e6eb;
+      --text:     #1A1A1A;
+      --sub:      #525357;
+      --muted:    #9D9FA1;
+      --accent:   #1462FC;
+    }
+    [data-theme="dark"] {
+      --bg:       #0d0d10;
+      --surface:  #16161c;
+      --surface2: #1e1e26;
+      --border:   #2e2e3a;
+      --text:     #e8e8ec;
+      --sub:      #9090a0;
+      --muted:    #5a5a70;
+      --accent:   #4d8fff;
+    }
+
+    body {
+      font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: linear-gradient(135deg, #0d2a52 0%, #1462FC 70%, #3a7aff 100%);
+      color: #fff;
+      padding: 40px 32px 44px;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 40px;
+      background: var(--bg);
+      clip-path: ellipse(55% 100% at 50% 100%);
+    }
+    .header-inner { max-width: 860px; margin: 0 auto; }
+    .header-meta {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .tag {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 6px;
+      padding: 3px 10px;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .tag-version { background: rgba(255,255,255,0.2); }
+    .header h1 {
+      font-size: clamp(20px, 3.5vw, 30px);
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+    .header-desc {
+      font-size: 14px;
+      opacity: 0.82;
+      max-width: 560px;
+    }
+
+    /* ── Layout ── */
+    .wrap { max-width: 860px; margin: 0 auto; padding: 36px 20px 80px; }
+
+    /* ── Section ── */
+    .section { margin-bottom: 40px; }
+    .section-head {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 14px;
+    }
+    .section-num {
+      width: 26px; height: 26px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 800;
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-size: 17px; font-weight: 800;
+      color: var(--text);
+    }
+
+    /* ── Security Level Cards ── */
+    .level-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(192px, 1fr));
+      gap: 12px;
+    }
+    .level-card {
+      border-radius: 12px;
+      border: 1.5px solid;
+      padding: 16px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .level-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    /* S1 */
+    .s1 { background: #eaf7ee; border-color: #34A853; }
+    .s1::before { background: #34A853; }
+    [data-theme="dark"] .s1 { background: #0a1f10; border-color: #2a6e3a; }
+    /* S2 */
+    .s2 { background: #e8f0fe; border-color: #4285F4; }
+    .s2::before { background: #4285F4; }
+    [data-theme="dark"] .s2 { background: #0a1228; border-color: #2a4aa8; }
+    /* S3 */
+    .s3 { background: #fff8e1; border-color: #F9AB00; }
+    .s3::before { background: #F9AB00; }
+    [data-theme="dark"] .s3 { background: #1e1600; border-color: #7a5500; }
+    /* S4 */
+    .s4 { background: #fce8e6; border-color: #EA4335; }
+    .s4::before { background: #EA4335; }
+    [data-theme="dark"] .s4 { background: #200a08; border-color: #8a1e16; }
+
+    .level-badge {
+      display: inline-block;
+      font-size: 11px; font-weight: 800;
+      letter-spacing: 0.06em;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    .s1 .level-badge { background: #34A853; color: #fff; }
+    .s2 .level-badge { background: #4285F4; color: #fff; }
+    .s3 .level-badge { background: #F9AB00; color: #fff; }
+    .s4 .level-badge { background: #EA4335; color: #fff; }
+
+    .level-name {
+      font-size: 14px; font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .s1 .level-name { color: #0d5c22; }
+    .s2 .level-name { color: #0d3a8c; }
+    .s3 .level-name { color: #7a5000; }
+    .s4 .level-name { color: #8c1a12; }
+    [data-theme="dark"] .s1 .level-name { color: #5ae080; }
+    [data-theme="dark"] .s2 .level-name { color: #7ab0ff; }
+    [data-theme="dark"] .s3 .level-name { color: #ffc940; }
+    [data-theme="dark"] .s4 .level-name { color: #ff7066; }
+
+    .level-desc {
+      font-size: 12px;
+      line-height: 1.55;
+    }
+    .s1 .level-desc { color: #1a5c2a; }
+    .s2 .level-desc { color: #1a3a7a; }
+    .s3 .level-desc { color: #6a4200; }
+    .s4 .level-desc { color: #7a1a12; }
+    [data-theme="dark"] .s1 .level-desc { color: #4ac060; }
+    [data-theme="dark"] .s2 .level-desc { color: #5a90e0; }
+    [data-theme="dark"] .s3 .level-desc { color: #d09020; }
+    [data-theme="dark"] .s4 .level-desc { color: #d05048; }
+
+    .level-who {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(0,0,0,0.08);
+      font-size: 11px; font-weight: 600;
+    }
+    [data-theme="dark"] .level-who { border-color: rgba(255,255,255,0.07); }
+    .s1 .level-who { color: #137333; }
+    .s2 .level-who { color: #1557b0; }
+    .s3 .level-who { color: #8a5c00; }
+    .s4 .level-who { color: #9a1e16; }
+    [data-theme="dark"] .s1 .level-who { color: #4ade80; }
+    [data-theme="dark"] .s2 .level-who { color: #93c5fd; }
+    [data-theme="dark"] .s3 .level-who { color: #fcd34d; }
+    [data-theme="dark"] .s4 .level-who { color: #f87171; }
+
+    /* S4 신설 badge */
+    .new-badge {
+      font-size: 10px; font-weight: 800;
+      background: #EA4335; color: #fff;
+      border-radius: 4px; padding: 1px 6px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    /* ── Rule Block ── */
+    .rule-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .rule-block + .rule-block { margin-top: 12px; }
+    .rule-head {
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      padding: 11px 18px;
+      font-size: 13px; font-weight: 700;
+      color: var(--text);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .rule-body { padding: 16px 18px; }
+
+    /* ── Format Box ── */
+    .format-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-bottom: 14px;
+    }
+    .format-label {
+      font-size: 11px; font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .format-str {
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 15px; font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+    }
+    .format-parts {
+      display: flex; flex-wrap: wrap;
+      gap: 6px; margin-top: 10px;
+    }
+    .part {
+      font-size: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 10px;
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      color: var(--sub);
+    }
+    .part-req { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Example Table ── */
+    .ex-list { display: flex; flex-direction: column; gap: 6px; }
+    .ex-row {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 13px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: var(--surface2);
+    }
+    .ex-icon { font-style: normal; font-family: inherit; }
+    .good-row { }
+    .bad-row { opacity: 0.65; }
+    .ex-label {
+      font-size: 10px; font-weight: 700;
+      border-radius: 4px; padding: 2px 6px;
+      flex-shrink: 0; margin-top: 1px;
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+    .good-label { background: #e6f4ea; color: #137333; }
+    .bad-label  { background: #fce8e6; color: #9a1e16; text-decoration: none; }
+    [data-theme="dark"] .good-label { background: #0c2a14; color: #4ade80; }
+    [data-theme="dark"] .bad-label  { background: #2a0c0a; color: #f87171; }
+    .bad-text { text-decoration: line-through; color: var(--muted); }
+
+    /* ── Folder Tree ── */
+    .tree {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 2;
+      color: var(--text);
+      overflow-x: auto;
+    }
+    .tree-s1 { color: #137333; font-weight: 700; }
+    .tree-s2 { color: #1557b0; font-weight: 700; }
+    .tree-s3 { color: #8a5c00; font-weight: 700; }
+    .tree-s4 { color: #9a1e16; font-weight: 700; }
+    [data-theme="dark"] .tree-s1 { color: #4ade80; }
+    [data-theme="dark"] .tree-s2 { color: #93c5fd; }
+    [data-theme="dark"] .tree-s3 { color: #fcd34d; }
+    [data-theme="dark"] .tree-s4 { color: #f87171; }
+    .tree-dim { color: var(--muted); }
+    .tree-file { color: var(--sub); }
+
+    /* ── Status Flow ── */
+    .status-flow {
+      display: flex; align-items: center; flex-wrap: wrap;
+      gap: 0; margin: 4px 0 14px;
+    }
+    .status-step {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 12px; font-weight: 700;
+      color: var(--sub);
+      white-space: nowrap;
+    }
+    .status-step.active {
+      background: #e8f0fe;
+      border-color: #4285F4;
+      color: #1462FC;
+    }
+    [data-theme="dark"] .status-step.active { background: #0e1a3a; border-color: #4285F4; color: #93c5fd; }
+    .status-arrow {
+      font-size: 14px; color: var(--muted);
+      padding: 0 4px;
+    }
+    .status-step.archive {
+      background: var(--surface2);
+      border-style: dashed;
+      color: var(--muted);
+    }
+
+    /* ── Callout ── */
+    .callout {
+      display: flex; gap: 12px;
+      padding: 14px 18px;
+      border-radius: 10px;
+      border-left: 3px solid;
+      margin-top: 14px;
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--text);
+    }
+    .callout-warn { background: #fff8e1; border-color: #F9AB00; }
+    .callout-info { background: #e8f0fe; border-color: #4285F4; }
+    .callout-new  { background: #fce8e6; border-color: #EA4335; }
+    [data-theme="dark"] .callout-warn { background: #1e1600; border-color: #7a5500; }
+    [data-theme="dark"] .callout-info { background: #0a1228; border-color: #2a4aa8; }
+    [data-theme="dark"] .callout-new  { background: #200a08; border-color: #8a1e16; }
+
+    /* ── Do / Don't ── */
+    .do-dont {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .do-box, .dont-box {
+      border-radius: 10px;
+      padding: 14px 16px;
+      border: 1px solid;
+    }
+    .do-box   { background: #eaf7ee; border-color: #34A853; }
+    .dont-box { background: #fce8e6; border-color: #EA4335; }
+    [data-theme="dark"] .do-box   { background: #0a1f10; border-color: #2a6e3a; }
+    [data-theme="dark"] .dont-box { background: #200a08; border-color: #8a1e16; }
+    .do-label   { font-size: 12px; font-weight: 800; color: #137333; margin-bottom: 10px; }
+    .dont-label { font-size: 12px; font-weight: 800; color: #9a1e16; margin-bottom: 10px; }
+    [data-theme="dark"] .do-label   { color: #4ade80; }
+    [data-theme="dark"] .dont-label { color: #f87171; }
+    .do-box li, .dont-box li {
+      font-size: 12px; line-height: 1.7;
+      list-style: none; padding-left: 14px;
+      position: relative;
+    }
+    .do-box li::before   { content: '✓'; position: absolute; left: 0; color: #34A853; font-weight: 700; }
+    .dont-box li::before { content: '✕'; position: absolute; left: 0; color: #EA4335; font-weight: 700; }
+    [data-theme="dark"] .do-box li   { color: var(--text); }
+    [data-theme="dark"] .dont-box li { color: var(--text); }
+
+    /* ── Divider ── */
+    .divider { height: 1px; background: var(--border); margin: 36px 0; }
+
+    /* ── Theme toggle ── */
+    #themeToggle {
+      position: fixed; bottom: 24px; right: 24px;
+      width: 44px; height: 44px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+      font-size: 20px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 100;
+    }
+
+    @media (max-width: 600px) {
+      .level-grid { grid-template-columns: 1fr 1fr; }
+      .do-dont { grid-template-columns: 1fr; }
+      .format-str { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+
+<button id="themeToggle" title="테마 전환">🌙</button>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-meta">
+      <span class="tag">📁 Google Drive</span>
+      <span class="tag tag-version">v1.0</span>
+      <span class="tag">2026.04.06 Align 미팅 후속</span>
+    </div>
+    <h1>폴더 · 파일 네이밍<br>퀵 가이드</h1>
+    <p class="header-desc">보안 레벨 기준 폴더 구조, 파일명 규칙, 버전 관리를 한 페이지로 정리한 실무 참고서입니다.</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- 1. 보안 레벨 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">1</div>
+      <div class="section-title">보안 레벨 체계 (S1 ~ S4)</div>
+    </div>
+
+    <div class="level-grid">
+      <div class="level-card s1">
+        <div class="level-badge">S1</div>
+        <div class="level-name">PUBLIC</div>
+        <div class="level-desc">전사 공개 자료.<br>온보딩, 복리후생, HRD, 공지, 가이드 등 누구나 조회 가능한 문서.</div>
+        <div class="level-who">👥 전 임직원 조회 가능</div>
+      </div>
+      <div class="level-card s2">
+        <div class="level-badge">S2</div>
+        <div class="level-name">INTERNAL</div>
+        <div class="level-desc">팀 내부 운영 자료.<br>채용 파이프라인, 성과관리, 사내 이벤트, 일반 인사 데이터.</div>
+        <div class="level-who">🔒 HR팀 전체</div>
+      </div>
+      <div class="level-card s3">
+        <div class="level-badge">S3</div>
+        <div class="level-name">CONFIDENTIAL</div>
+        <div class="level-desc">민감 운영 정보.<br>급여·보상 체계, 조직 전략, 계약·법무, 인력계획.</div>
+        <div class="level-who">🔐 HR 리더 + 경영진</div>
+      </div>
+      <div class="level-card s4">
+        <div class="level-badge">S4</div>
+        <div class="level-name">RESTRICTED <span class="new-badge">NEW</span></div>
+        <div class="level-desc">최고 기밀 자료.<br>임원 평가 원본, 개인 징계 기록, 경영진 전용 의사결정 문서.</div>
+        <div class="level-who">🔑 극소수 지정 권한자</div>
+      </div>
+    </div>
+
+    <div class="callout callout-new" style="margin-top:14px;">
+      <span>🆕</span>
+      <div><strong>S4 신설 배경 (04.06 Align):</strong> 기존 S3가 너무 넓어 평가·징계 등 극소수 접근 자료까지 포함. S3를 세분화하여 S4를 분리 신설. 이전 S1·S2 자료 중 일반 사내 공유 가능한 것은 S1로 통합, 기존 S3 중 HR팀 공유 가능한 것은 S2로 이동.</div>
+    </div>
+  </div>
+
+  <!-- 2. 폴더 구조 원칙 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">2</div>
+      <div class="section-title">폴더 구조 원칙</div>
+    </div>
+
+    <div class="rule-block">
+      <div class="rule-head">📐 4단계 계층 구조</div>
+      <div class="rule-body">
+        <div class="format-box">
+          <div class="format-label">구조</div>
+          <div class="format-str">보안레벨 / 기능 / 프로젝트 / 문서상태</div>
+          <div class="format-parts">
+            <span class="part part-req">S1_PUBLIC</span>
+            <span class="part">/</span>
+            <span class="part part-req">06_인사</span>
+            <span class="part">/</span>
+            <span class="part">2026_채용운영</span>
+            <span class="part">/</span>
+            <span class="part">03_검토</span>
+          </div>
+        </div>
+
+        <div class="tree">
+<span class="tree-s1">S1_PUBLIC/</span>
+├── 06_인사/
+│   ├── 온보딩가이드/
+│   ├── 복리후생안내/
+│   └── HRD/
+│       ├── 2026_ClaudeCourses/
+│       └── 2026_뉴스스크래핑/
+<span class="tree-s2">S2_INTERNAL/</span>
+├── 06_인사/
+│   ├── 2026_채용운영/
+│   │   ├── 01_기획/
+│   │   ├── 02_초안/
+│   │   ├── 03_검토/
+│   │   ├── 04_최종/
+│   │   └── 99_보관/
+│   ├── 2026_성과관리/
+│   └── 2026_HR팀운영/
+<span class="tree-s3">S3_CONFIDENTIAL/</span>
+├── 06_인사/
+│   ├── 2026_급여보상/
+│   └── 2026_조직전략/
+<span class="tree-s4">S4_RESTRICTED/</span>
+└── 06_인사/
+    └── 2026_평가원본/  <span class="tree-dim">← S4 신설 예시</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 폴더명 규칙 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">3</div>
+      <div class="section-title">폴더명 작성 규칙</div>
+    </div>
+
+    <div class="rule-block">
+      <div class="rule-head">📂 보안 레벨 폴더 (최상위 고정)</div>
+      <div class="rule-body">
+        <div class="ex-list">
+          <div class="ex-row good-row"><span class="ex-label good-label">형식</span>S1_PUBLIC &nbsp;/&nbsp; S2_INTERNAL &nbsp;/&nbsp; S3_CONFIDENTIAL &nbsp;/&nbsp; S4_RESTRICTED</div>
+        </div>
+        <div class="callout callout-warn" style="margin-top:12px;">
+          <span>⚠️</span>
+          <span>최상위 폴더명은 전사 공통 고정. 임의로 변경하거나 추가하지 않음.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule-block" style="margin-top:12px;">
+      <div class="rule-head">🏷️ 기능 폴더 (두 자리 번호 + 기능명)</div>
+      <div class="rule-body">
+        <div class="format-box">
+          <div class="format-label">형식</div>
+          <div class="format-str">00_기능명</div>
+        </div>
+        <div class="ex-list">
+          <div class="ex-row"><span class="ex-label good-label">예시</span>01_사업개발 &nbsp; 02_마케팅 &nbsp; 03_제품 &nbsp; 06_인사 &nbsp; 07_법무</div>
+          <div class="ex-row bad-row"><span class="ex-label bad-label">금지</span><span class="bad-text">HR자료 &nbsp; 인사팀 &nbsp; 마케팅부서</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule-block" style="margin-top:12px;">
+      <div class="rule-head">📁 프로젝트 폴더 (연도 + 프로젝트명)</div>
+      <div class="rule-body">
+        <div class="format-box">
+          <div class="format-label">형식</div>
+          <div class="format-str">YYYY_프로젝트명</div>
+        </div>
+        <div class="ex-list">
+          <div class="ex-row"><span class="ex-label good-label">예시</span>2026_채용운영 &nbsp; 2026_성과관리 &nbsp; 2026_Q2브랜드캠페인</div>
+          <div class="ex-row bad-row"><span class="ex-label bad-label">금지</span><span class="bad-text">채용 &nbsp; 신규프로젝트 &nbsp; 정리필요</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule-block" style="margin-top:12px;">
+      <div class="rule-head">🗂️ 문서 상태 폴더 (전사 고정)</div>
+      <div class="rule-body">
+        <div class="status-flow">
+          <div class="status-step">01_기획</div>
+          <div class="status-arrow">→</div>
+          <div class="status-step active">02_초안</div>
+          <div class="status-arrow">→</div>
+          <div class="status-step">03_검토</div>
+          <div class="status-arrow">→</div>
+          <div class="status-step">04_최종</div>
+          <div class="status-arrow">→</div>
+          <div class="status-step">05_배포</div>
+          <div class="status-arrow">→</div>
+          <div class="status-step archive">99_보관</div>
+        </div>
+        <div style="font-size:12px;color:var(--sub);line-height:1.8;margin-top:4px;">
+          <strong>01_기획</strong> 아이디어·요구사항 &nbsp;·&nbsp;
+          <strong>02_초안</strong> 작성 중 &nbsp;·&nbsp;
+          <strong>03_검토</strong> 리뷰·승인 대기 &nbsp;·&nbsp;
+          <strong>04_최종</strong> 확정본 &nbsp;·&nbsp;
+          <strong>05_배포</strong> 외부 전달본 &nbsp;·&nbsp;
+          <strong>99_보관</strong> 종료·이전 버전
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. 파일명 규칙 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">4</div>
+      <div class="section-title">파일명 작성 규칙</div>
+    </div>
+
+    <div class="rule-block">
+      <div class="rule-head">📄 기본 파일명 형식</div>
+      <div class="rule-body">
+        <div class="format-box">
+          <div class="format-label">형식</div>
+          <div class="format-str">YYYYMMDD_문서명_v00_작성자</div>
+          <div class="format-parts">
+            <span class="part part-req">YYYYMMDD</span>
+            <span class="part part-req">_문서명</span>
+            <span class="part part-req">_v01</span>
+            <span class="part">_이니셜 (선택)</span>
+          </div>
+        </div>
+        <div class="ex-list">
+          <div class="ex-row"><span class="ex-label good-label">예시</span>20260406_채용운영가이드_v01_KL</div>
+          <div class="ex-row"><span class="ex-label good-label">예시</span>20260406_신규서비스기획안_v03_JY</div>
+          <div class="ex-row"><span class="ex-label good-label">예시</span>20260406_2026Q1성과평가결과_v02_HR</div>
+          <div class="ex-row bad-row"><span class="ex-label bad-label">금지</span><span class="bad-text">기획안_최종 &nbsp; 보고서_진짜최종 &nbsp; report_new_final</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. 버전 관리 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">5</div>
+      <div class="section-title">버전 관리 규칙</div>
+    </div>
+
+    <div class="rule-block">
+      <div class="rule-head">🔢 버전 넘버링</div>
+      <div class="rule-body">
+        <div class="ex-list" style="margin-bottom:12px;">
+          <div class="ex-row"><span class="ex-label good-label">초안</span>20260404_예산안_<strong>v01</strong>_HR</div>
+          <div class="ex-row"><span class="ex-label good-label">수정</span>20260406_예산안_<strong>v02</strong>_HR</div>
+          <div class="ex-row"><span class="ex-label good-label">확정</span>20260408_예산안_<strong>v03</strong>_HR</div>
+          <div class="ex-row bad-row"><span class="ex-label bad-label">금지</span><span class="bad-text">예산안_최종 &nbsp; 예산안_최종2 &nbsp; 예산안_진짜최종</span></div>
+        </div>
+        <div style="font-size:12px;color:var(--sub);line-height:1.8;">
+          · 초안은 <strong>v01</strong>부터 시작 &nbsp;·&nbsp; 검토 반영 후 <strong>v02, v03</strong>으로 증가<br>
+          · 이전 버전은 삭제 말고 <strong>99_보관</strong> 폴더로 이동<br>
+          · 외부 발송본은 별도 <strong>PDF</strong>로 저장 후 05_배포 폴더에 보관
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Do / Don't -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">6</div>
+      <div class="section-title">Do / Don't 요약</div>
+    </div>
+
+    <div class="do-dont">
+      <div class="do-box">
+        <div class="do-label">✅ DO</div>
+        <ul>
+          <li>폴더명에 _ 사용 (띄어쓰기 금지)</li>
+          <li>번호는 두 자리 고정 (01, 02 …)</li>
+          <li>파일명에 날짜·버전·작성자 포함</li>
+          <li>보안 레벨이 다르면 폴더 분리</li>
+          <li>완료 자료는 99_보관으로 이동</li>
+          <li>기능 기준으로 폴더 생성</li>
+          <li>폴더 깊이 4단계 이내 유지</li>
+        </ul>
+      </div>
+      <div class="dont-box">
+        <div class="dont-label">❌ DON'T</div>
+        <ul>
+          <li>최종, 최종2, 진짜최종, new, last</li>
+          <li>새폴더, 기타, temp, misc, 정리필요</li>
+          <li>사람 이름 중심 폴더 (민수자료, jane work)</li>
+          <li>같은 자료 여러 폴더에 중복 저장</li>
+          <li>보안 다른 자료 같은 폴더에 혼합</li>
+          <li>5단계 이상 깊은 중첩 습관화</li>
+          <li>재무↔회계, HR↔인사 등 유사명 혼용</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 마이그레이션 액션 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">🔧</div>
+      <div class="section-title">마이그레이션 진행 순서 (04.06 Align 후속)</div>
+    </div>
+
+    <div class="rule-block">
+      <div class="rule-body" style="padding:18px 20px;">
+        <ol style="padding-left:20px;display:flex;flex-direction:column;gap:14px;">
+          <li style="font-size:14px;line-height:1.7;">
+            <strong>저스틴 → 기존 공유 드라이브 전체 트리 구조 공유</strong><br>
+            <span style="color:var(--sub);font-size:13px;">현재 폴더 목록 파악이 선행. 스크린샷 또는 텍스트 트리로 공유 요청.</span>
+          </li>
+          <li style="font-size:14px;line-height:1.7;">
+            <strong>킬리안 → 기능별 폴더 분류 초안 작성 + 담당자 매핑</strong><br>
+            <span style="color:var(--sub);font-size:13px;">위 트리 기준으로 각 폴더가 어느 기능·보안 레벨에 해당하는지 초안 작성.</span>
+          </li>
+          <li style="font-size:14px;line-height:1.7;">
+            <strong>기능별 담당자에게 해당 폴더 권한 부여</strong><br>
+            <span style="color:var(--sub);font-size:13px;">각 기능 폴더의 적정 담당자를 지정하고 S2/S3 수준 폴더에 권한 위임.</span>
+          </li>
+          <li style="font-size:14px;line-height:1.7;">
+            <strong>담당자가 신규 구조로 파일 이동</strong><br>
+            <span style="color:var(--sub);font-size:13px;">이 퀵 가이드 규칙에 따라 각자 담당 폴더 정리. 일괄보다 우선순위 높은 폴더부터.</span>
+          </li>
+          <li style="font-size:14px;line-height:1.7;">
+            <strong>구조 검토 후 S4 대상 폴더 별도 권한 재설정</strong><br>
+            <span style="color:var(--sub);font-size:13px;">평가·징계 등 S4 해당 자료는 이동 완료 후 저스틴·킬리안이 권한 최종 조정.</span>
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="callout callout-info" style="margin-top:12px;">
+      <span>💡</span>
+      <div>기존 자료는 <strong>일괄 이동보다 우선순위 높은 폴더부터 점진적 정리</strong>. 이 가이드는 반기별 또는 필요 시 리뷰.</div>
+    </div>
+  </div>
+
+  <footer style="text-align:center;font-size:12px;color:var(--muted);padding-top:20px;border-top:1px solid var(--border);">
+    SentBe HR팀 &nbsp;·&nbsp; Google Drive 네이밍 가이드 v1.0 &nbsp;·&nbsp; 2026.04.06 기준
+    &nbsp;·&nbsp; <a href="gdrive-folder-structure.html" style="color:var(--accent);text-decoration:none;">폴더 구조 시각화 보기</a>
+  </footer>
+
+</div>
+
+<script>
+  (function() {
+    var s = localStorage.getItem('gdrive-guide-theme') || 'light';
+    if (s === 'dark') {
+      document.getElementById('html-root').setAttribute('data-theme', 'dark');
+      document.getElementById('themeToggle').textContent = '☀️';
+    }
+  })();
+  document.getElementById('themeToggle').addEventListener('click', function() {
+    var r = document.getElementById('html-root');
+    var dark = r.getAttribute('data-theme') === 'dark';
+    if (dark) {
+      r.removeAttribute('data-theme');
+      this.textContent = '🌙';
+      localStorage.setItem('gdrive-guide-theme', 'light');
+    } else {
+      r.setAttribute('data-theme', 'dark');
+      this.textContent = '☀️';
+      localStorage.setItem('gdrive-guide-theme', 'dark');
+    }
+  });
+</script>
+</body>
+</html>
