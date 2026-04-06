@@ -827,13 +827,61 @@
           <div class="step-num">4</div>
           <h3>동기화 방식 선택 → 스트리밍 권장</h3>
         </div>
-        <p class="step-desc">
-          로그인 후 동기화 방식을 선택합니다. 저장공간 절약을 위해 <strong>스트리밍(클라우드에 파일 스트리밍)</strong>을 선택하세요.
-        </p>
-        <div class="callout callout-warn">
-          <span class="callout-icon">⚠️</span>
-          <div><strong>미러링 주의</strong> — 공유 드라이브(HR Gdrive) 미러링 시 수십 GB가 C 드라이브에 저장될 수 있습니다.</div>
+        <p class="step-desc">로그인 후 동기화 방식을 선택합니다. 아래 두 옵션 중 하나를 고르게 됩니다.</p>
+        <div class="sync-choice">
+          <div class="sync-card sync-recommended">
+            <div class="sync-card-header">
+              <span class="sync-badge">✅ 권장</span>
+              <span class="sync-icon">☁️</span>
+            </div>
+            <div class="sync-title">스트리밍</div>
+            <div class="sync-subtitle">클라우드에 파일 스트리밍</div>
+            <ul class="sync-pros">
+              <li>C 드라이브 저장공간 거의 사용 안 함</li>
+              <li>필요할 때만 다운로드</li>
+              <li>대부분의 직원에게 적합</li>
+            </ul>
+          </div>
+          <div class="sync-card sync-caution">
+            <div class="sync-card-header">
+              <span class="sync-badge-warn">⚠️ 주의</span>
+              <span class="sync-icon">💾</span>
+            </div>
+            <div class="sync-title">미러링</div>
+            <div class="sync-subtitle">내 PC에 파일 미러링</div>
+            <ul class="sync-cons">
+              <li>전체 파일이 C 드라이브에 저장됨</li>
+              <li>수십 GB 저장공간 소비</li>
+              <li>공유 드라이브 선택 시 특히 주의</li>
+            </ul>
+          </div>
         </div>
+        <style>
+          .sync-choice { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+          .sync-card { border-radius: 14px; padding: 20px; border: 2px solid transparent; }
+          .sync-recommended { background: #eaf7ee; border-color: #34A853; }
+          .sync-caution     { background: #fef9ec; border-color: #e0c040; }
+          [data-theme="dark"] .sync-recommended { background: #0c2216; border-color: #1a5a28; }
+          [data-theme="dark"] .sync-caution     { background: #241c08; border-color: #6a5000; }
+          .sync-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+          .sync-badge { font-size: 12px; font-weight: 700; color: #1a7a38; background: #c8f0d4; border-radius: 100px; padding: 3px 10px; }
+          .sync-badge-warn { font-size: 12px; font-weight: 700; color: #8a6000; background: #fce8a0; border-radius: 100px; padding: 3px 10px; }
+          [data-theme="dark"] .sync-badge { background: #1a5a28; color: #80d898; }
+          [data-theme="dark"] .sync-badge-warn { background: #6a5000; color: #e8d080; }
+          .sync-icon { font-size: 24px; }
+          .sync-title { font-size: 16px; font-weight: 800; margin-bottom: 2px; color: #1A1A1A; }
+          .sync-subtitle { font-size: 12px; color: #636366; margin-bottom: 10px; }
+          [data-theme="dark"] .sync-title { color: #f0f0f5; }
+          [data-theme="dark"] .sync-subtitle { color: #66667a; }
+          .sync-pros, .sync-cons { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+          .sync-pros li { font-size: 13px; color: #1a7a38; padding-left: 16px; position: relative; }
+          .sync-pros li::before { content: '✓'; position: absolute; left: 0; font-weight: 700; }
+          .sync-cons li { font-size: 13px; color: #8a6000; padding-left: 16px; position: relative; }
+          .sync-cons li::before { content: '!'; position: absolute; left: 0; font-weight: 700; }
+          [data-theme="dark"] .sync-pros li { color: #80d898; }
+          [data-theme="dark"] .sync-cons li { color: #e8d080; }
+          @media (max-width: 480px) { .sync-choice { grid-template-columns: 1fr; } }
+        </style>
       </div>
     </section>
 
