@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Interactive Onboarding | SentBe HRD</title>
+  <link rel="stylesheet" href="sentbe-design-system.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--color-g100, #F7F8FB);
+      color: var(--color-g900, #1A1A1A);
+      min-height: 100vh;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #0C3698 0%, #1462FC 60%, #3176FD 100%);
+      color: #fff;
+      padding: 80px 24px 72px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(90deg, #BCD5FF, #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      line-height: 1.6;
+      opacity: 0.85;
+      max-width: 540px;
+      margin: 0 auto 32px;
+    }
+
+    .hero-quote {
+      display: inline-block;
+      background: rgba(255,255,255,0.1);
+      border-left: 3px solid rgba(255,255,255,0.5);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 20px;
+      font-size: 15px;
+      font-style: italic;
+      opacity: 0.9;
+      max-width: 480px;
+      text-align: left;
+    }
+
+    /* ── Container ── */
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── Section ── */
+    .section {
+      padding: 64px 0;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--color-g900);
+      margin-bottom: 8px;
+    }
+
+    .section-desc {
+      font-size: 15px;
+      color: var(--color-g500);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    /* ── Why Cards ── */
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .why-card {
+      background: #fff;
+      border: 1px solid var(--color-g200);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .why-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    .why-before {
+      font-size: 13px;
+      color: var(--color-g400);
+      text-decoration: line-through;
+      margin-bottom: 4px;
+    }
+
+    .why-after {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-sb550);
+    }
+
+    .why-desc {
+      font-size: 13px;
+      color: var(--color-g500);
+      line-height: 1.5;
+      margin-top: 8px;
+    }
+
+    /* ── Steps ── */
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .step-item {
+      background: #fff;
+      border: 1px solid var(--color-g200);
+      border-radius: 14px;
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: 48px 1fr auto;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .step-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--color-sb150);
+      color: var(--color-sb550);
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-num.optional {
+      background: var(--color-g150);
+      color: var(--color-g400);
+    }
+
+    .step-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-g900);
+      margin-bottom: 2px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--color-g500);
+      line-height: 1.4;
+    }
+
+    .step-badge {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+
+    .badge-blue {
+      background: var(--color-sb150);
+      color: var(--color-sb550);
+    }
+
+    .badge-green {
+      background: var(--color-gr150);
+      color: var(--color-gr700);
+    }
+
+    .badge-gray {
+      background: var(--color-g150);
+      color: var(--color-g500);
+    }
+
+    /* ── Design Principles ── */
+    .principles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .principle-card {
+      background: #fff;
+      border: 1px solid var(--color-g200);
+      border-radius: 14px;
+      padding: 20px;
+    }
+
+    .principle-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-sb550);
+      background: var(--color-sb150);
+      border-radius: 6px;
+      padding: 3px 8px;
+      margin-bottom: 10px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .principle-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-g900);
+      margin-bottom: 6px;
+    }
+
+    .principle-desc {
+      font-size: 13px;
+      color: var(--color-g500);
+      line-height: 1.5;
+    }
+
+    /* ── STOP Protocol ── */
+    .stop-box {
+      background: linear-gradient(135deg, #F4F7FD, #EBF2FE);
+      border: 1px solid var(--color-sb200);
+      border-radius: 16px;
+      padding: 32px;
+      margin-top: 32px;
+    }
+
+    .stop-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--color-sb700);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stop-flow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .stop-step {
+      background: #fff;
+      border: 1px solid var(--color-sb200);
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-sb700);
+      text-align: center;
+    }
+
+    .stop-arrow {
+      color: var(--color-sb400);
+      font-size: 16px;
+    }
+
+    .stop-divider {
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      color: var(--color-g400);
+      margin: 8px 0;
+    }
+
+    .stop-marker {
+      background: #FFF3CD;
+      border: 1px solid #FFC107;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #856404;
+    }
+
+    /* ── MCP Table ── */
+    .mcp-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--color-g200);
+    }
+
+    .mcp-table th {
+      background: var(--color-g100);
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-g500);
+      text-align: left;
+      border-bottom: 1px solid var(--color-g200);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .mcp-table td {
+      padding: 14px 16px;
+      font-size: 14px;
+      color: var(--color-g700);
+      border-bottom: 1px solid var(--color-g150);
+    }
+
+    .mcp-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .mcp-name {
+      font-weight: 600;
+      color: var(--color-sb550);
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: var(--color-g900);
+      color: #fff;
+      padding: 64px 24px;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: -0.3px;
+    }
+
+    .cta-desc {
+      font-size: 15px;
+      opacity: 0.7;
+      margin-bottom: 32px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--color-sb550);
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    .btn-primary:hover { background: var(--color-sb600); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    .btn-secondary:hover { background: rgba(255,255,255,0.18); }
+
+    /* ── Footer ── */
+    .footer {
+      padding: 32px 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--color-g400);
+      border-top: 1px solid var(--color-g200);
+    }
+
+    .footer a {
+      color: var(--color-sb550);
+      text-decoration: none;
+    }
+
+    /* ── Divider ── */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--color-g200);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">
+      🤖 Claude Code Skills 기반
+    </div>
+    <h1>AI Native 조직을 위한<br><em>대화형 온보딩 템플릿</em></h1>
+    <p class="hero-sub">
+      PDF 문서를 건네는 온보딩은 그만.<br>
+      AI 에이전트와 7단계를 함께 체험하며 조직에 스며드는 방식입니다.
+    </p>
+    <blockquote class="hero-quote">
+      "AI Native를 말하면서 AI Naive한 온보딩을 하고 있진 않나요?"
+    </blockquote>
+  </section>
+
+  <!-- Why -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">왜 만들었나</h2>
+      <p class="section-desc">말과 경험이 일치하지 않는 모순을 없애기 위해 온보딩 자체를 "AI와 함께 일하는 법"을 체험하는 과정으로 설계했습니다.</p>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-icon">📄</div>
+          <div class="why-before">읽기</div>
+          <div class="why-after">→ 체험</div>
+          <p class="why-desc">문서 전달이 아니라 에이전트와 대화하며 진행</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">🔄</div>
+          <div class="why-before">정적 관리</div>
+          <div class="why-after">→ 실시간 fetch</div>
+          <p class="why-desc">Notion 단일 소스에서 MCP로 즉시 fetch — 이중 관리 제거</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">✅</div>
+          <div class="why-before">완료 여부 체크</div>
+          <div class="why-after">→ 이해도 기반</div>
+          <p class="why-desc">체크박스 대신 학습 리포트 자동 생성</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">🤝</div>
+          <div class="why-before">혼자 진행</div>
+          <div class="why-after">→ 자동 연결</div>
+          <p class="why-desc">Step 완료 시 담당자에게 자동 커피챗 DM 발송</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- Steps -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">온보딩 7단계</h2>
+      <p class="section-desc">따라하기 → 응용 → 직접 만들기 순으로 점진적 난이도로 설계되었습니다.</p>
+      <div class="steps-list">
+        <div class="step-item">
+          <div class="step-num">0</div>
+          <div>
+            <div class="step-name">Setup</div>
+            <div class="step-desc">Claude Code 설치 + MCP 연결</div>
+          </div>
+          <span class="step-badge badge-gray">준비</span>
+        </div>
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div>
+            <div class="step-name">General</div>
+            <div class="step-desc">회사 문화, 업무 도구 세팅, Slack 인사</div>
+          </div>
+          <span class="step-badge badge-blue">따라하기</span>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div>
+            <div class="step-name">Product</div>
+            <div class="step-desc">자사 제품/서비스 체험 → Notion 체험 리포트</div>
+          </div>
+          <span class="step-badge badge-blue">응용</span>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div>
+            <div class="step-name">Biz</div>
+            <div class="step-desc">BM, 고객 여정, 시나리오 퀘스트</div>
+          </div>
+          <span class="step-badge badge-blue">응용</span>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div>
+            <div class="step-name">Build Your First Skill</div>
+            <div class="step-desc">스킬 해부 → 설계 → 구현 → GitHub PR 산출</div>
+          </div>
+          <span class="step-badge badge-green">만들기</span>
+        </div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div>
+            <div class="step-name">Wrap Up</div>
+            <div class="step-desc">회고 + 팀 킥오프 조언</div>
+          </div>
+          <span class="step-badge badge-green">마무리</span>
+        </div>
+        <div class="step-item">
+          <div class="step-num optional">6</div>
+          <div>
+            <div class="step-name">Live Audit</div>
+            <div class="step-desc">실서비스 참관 (선택)</div>
+          </div>
+          <span class="step-badge badge-gray">선택</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- Design Principles -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">핵심 설계 원칙</h2>
+      <p class="section-desc">단순한 AI 자동화가 아닌, 사람이 이해하며 성장하는 온보딩을 위한 설계입니다.</p>
+      <div class="principles-grid">
+        <div class="principle-card">
+          <span class="principle-tag">Notion</span>
+          <div class="principle-title">동적 콘텐츠 참조</div>
+          <p class="principle-desc">콘텐츠 하드코딩 없이 MCP로 실시간 fetch. 온보딩 자료 한 곳에서만 관리.</p>
+        </div>
+        <div class="principle-card">
+          <span class="principle-tag">점진적 난이도</span>
+          <div class="principle-title">따라하기 → 만들기</div>
+          <p class="principle-desc">Step 0~1 따라하기, Step 2~3 응용, Step 4~5 직접 제작으로 자연스러운 성장.</p>
+        </div>
+        <div class="principle-card">
+          <span class="principle-tag">Slack</span>
+          <div class="principle-title">자동 팀 연결</div>
+          <p class="principle-desc">Step 완료 시 담당자에게 커피챗 DM + 완료 알림 자동 발송.</p>
+        </div>
+        <div class="principle-card">
+          <span class="principle-tag">산출물</span>
+          <div class="principle-title">결과물 중심 설계</div>
+          <p class="principle-desc">매 Step마다 Notion 리포트, GitHub PR 등 실제 산출물이 남는 구조.</p>
+        </div>
+      </div>
+
+      <!-- STOP Protocol -->
+      <div class="stop-box">
+        <div class="stop-title">⛔ STOP PROTOCOL — 2턴 진행 방식</div>
+        <p style="font-size:13px; color: var(--color-sb700); margin-bottom:16px; opacity:0.8;">
+          신규입사자가 내용을 소화하지 못한 채 넘어가는 것을 막는 핵심 장치
+        </p>
+        <div class="stop-flow">
+          <div class="stop-step">턴 1<br><strong>EXPLAIN</strong></div>
+          <span class="stop-arrow">→</span>
+          <div class="stop-step">EXECUTE</div>
+          <span class="stop-arrow">→</span>
+          <div class="stop-marker">⛔ STOP</div>
+          <div class="stop-divider">— 신규입사자 소화 시간 —</div>
+          <div class="stop-step">턴 2<br><strong>CHECK</strong></div>
+          <span class="stop-arrow">→</span>
+          <div class="stop-step">피드백</div>
+          <span class="stop-arrow">→</span>
+          <div class="stop-step">다음 Phase</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- MCP Connections -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">MCP 연결 서비스</h2>
+      <p class="section-desc">Step 0에서 한 번 세팅하면 이후 모든 Step에서 자동으로 활용됩니다.</p>
+      <table class="mcp-table">
+        <thead>
+          <tr>
+            <th>서비스</th>
+            <th>용도</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="mcp-name">Notion</span></td>
+            <td>온보딩 콘텐츠 fetch, 산출물 저장</td>
+          </tr>
+          <tr>
+            <td><span class="mcp-name">Slack</span></td>
+            <td>완료 알림, 팀 연결, 인사 메시지 자동 발송</td>
+          </tr>
+          <tr>
+            <td><span class="mcp-name">Gmail</span></td>
+            <td>이메일 세팅 확인</td>
+          </tr>
+          <tr>
+            <td><span class="mcp-name">Google Calendar</span></td>
+            <td>일정 확인 및 킥오프 미팅 설정</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-title">지금 바로 시작하기</div>
+    <p class="cta-desc">템플릿을 fork하고 자사 정보로 커스터마이징하면 바로 사용 가능합니다.</p>
+    <div class="cta-buttons">
+      <a href="https://github.com/Vivi-lee-01/ai-onboarding-template" class="btn-primary" target="_blank">
+        ⭐ GitHub 템플릿 보기
+      </a>
+      <a href="https://github.com/Vivi-lee-01/ai-onboarding-template/generate" class="btn-secondary" target="_blank">
+        🍴 이 템플릿 사용하기
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>
+      Made by <a href="https://github.com/Vivi-lee-01" target="_blank">Vivi Lee</a> &nbsp;·&nbsp;
+      <a href="https://vivi-blog-three.vercel.app/posts/interactive-onboarding" target="_blank">만들게 된 이야기 읽기</a>
+      &nbsp;·&nbsp; MIT License
+    </p>
+    <p style="margin-top:8px;">SentBe HRD Center</p>
+  </footer>
+
+</body>
+</html>
