@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="ko" id="html-root">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HR Gdrive 폴더 구조 가이드 | SentBe HRD</title>
+  <link rel="stylesheet" href="sentbe-design-system.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--color-g100, #F7F8FB);
+      color: var(--color-g900, #1A1A1A);
+      min-height: 100vh;
+    }
+
+    /* ── Dark Mode ── */
+    [data-theme="dark"] body { background: #0d0d10; color: #e8e8ec; }
+    [data-theme="dark"] { --page-bg: #0d0d10; --surface: #16161c; --surface2: #1e1e26; --border: #2e2e3a; --text: #e8e8ec; --text-sub: #9090a0; }
+    :root { --page-bg: #F7F8FB; --surface: #ffffff; --surface2: #f0f2f7; --border: #e3e6eb; --text: #1A1A1A; --text-sub: #525357; }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #1E3A5F 0%, #1967D2 60%, #4285F4 100%);
+      color: #fff;
+      padding: 72px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 52px;
+      background: var(--page-bg, #F7F8FB);
+      clip-path: ellipse(55% 100% at 50% 100%);
+    }
+    [data-theme="dark"] .hero::after { background: #0d0d10; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .hero h1 {
+      font-size: clamp(24px, 4.5vw, 40px);
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 14px;
+      position: relative;
+    }
+    .hero-sub {
+      font-size: 16px;
+      line-height: 1.65;
+      opacity: 0.88;
+      max-width: 520px;
+      margin: 0 auto 0;
+      position: relative;
+    }
+
+    /* ── Layout ── */
+    .main { max-width: 960px; margin: 0 auto; padding: 48px 20px 80px; }
+    section + section { margin-top: 56px; }
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-sub {
+      font-size: 14px;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    /* ── Legend Chips ── */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .legend-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1.5px solid;
+    }
+    .chip-s1 { background: #eaf7ee; border-color: #34A853; color: #1e7e34; }
+    .chip-s2 { background: #fff8e1; border-color: #F9AB00; color: #8a6000; }
+    .chip-s3 { background: #fce8e6; border-color: #EA4335; color: #9a1e16; }
+    .chip-s0 { background: #e8eeff; border-color: #4285F4; color: #1a4db5; }
+    [data-theme="dark"] .chip-s1 { background: #0c2a14; border-color: #1e7e34; color: #4ade80; }
+    [data-theme="dark"] .chip-s2 { background: #2a2000; border-color: #8a6000; color: #fcd34d; }
+    [data-theme="dark"] .chip-s3 { background: #2a0c0a; border-color: #9a1e16; color: #f87171; }
+    [data-theme="dark"] .chip-s0 { background: #0e1a3a; border-color: #1a4db5; color: #93c5fd; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+
+    /* ── Google Drive Mockup ── */
+    .gdrive-app {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    [data-theme="dark"] .gdrive-app { box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
+
+    /* Titlebar */
+    .gdrive-titlebar {
+      background: #fff;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 0 16px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    [data-theme="dark"] .gdrive-titlebar { background: #1e1e26; border-color: #2e2e3a; }
+    .gdrive-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #5f6368;
+      flex-shrink: 0;
+    }
+    [data-theme="dark"] .gdrive-logo { color: #9090a0; }
+    .gdrive-logo-icon { width: 32px; height: 32px; }
+    .gdrive-searchbar {
+      flex: 1;
+      max-width: 480px;
+      background: #f1f3f4;
+      border-radius: 24px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 8px;
+      color: #5f6368;
+      font-size: 14px;
+    }
+    [data-theme="dark"] .gdrive-searchbar { background: #2a2a36; color: #9090a0; }
+    .gdrive-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, #1462FC, #4285F4);
+      color: #fff; font-size: 13px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    /* Body */
+    .gdrive-body {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: 560px;
+    }
+
+    /* Sidebar */
+    .gdrive-sidebar {
+      background: #fff;
+      border-right: 1px solid #e0e0e0;
+      padding: 12px 8px;
+    }
+    [data-theme="dark"] .gdrive-sidebar { background: #1e1e26; border-color: #2e2e3a; }
+    .sidebar-new-btn {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px;
+      background: #fff;
+      border: 1px solid #dadce0;
+      border-radius: 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #202124;
+      margin: 0 8px 12px;
+      cursor: default;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    [data-theme="dark"] .sidebar-new-btn { background: #2a2a36; border-color: #3a3a4a; color: #e8e8ec; }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 16px;
+      border-radius: 0 100px 100px 0;
+      font-size: 14px; color: #202124;
+      cursor: default;
+    }
+    [data-theme="dark"] .sidebar-item { color: #c8c8d4; }
+    .sidebar-item.active {
+      background: #e8f0fe;
+      color: #1967D2;
+      font-weight: 600;
+    }
+    [data-theme="dark"] .sidebar-item.active { background: #162040; color: #93c5fd; }
+    .sidebar-section {
+      font-size: 12px;
+      font-weight: 600;
+      color: #5f6368;
+      padding: 14px 24px 4px;
+      letter-spacing: 0.04em;
+    }
+    [data-theme="dark"] .sidebar-section { color: #6060a0; }
+    .sidebar-divider { height: 1px; background: #e0e0e0; margin: 8px 8px; }
+    [data-theme="dark"] .sidebar-divider { background: #2e2e3a; }
+
+    /* Main content */
+    .gdrive-main {
+      background: var(--page-bg, #f8f9fa);
+      padding: 20px 24px;
+    }
+    [data-theme="dark"] .gdrive-main { background: #12121a; }
+    .gdrive-breadcrumb {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 20px; font-weight: 700;
+      color: #202124; margin-bottom: 20px;
+    }
+    [data-theme="dark"] .gdrive-breadcrumb { color: #e8e8ec; }
+    .breadcrumb-sep { color: #9aa0a6; font-size: 16px; margin: 0 2px; }
+
+    /* Folder Grid */
+    .folder-section-label {
+      font-size: 12px; font-weight: 600;
+      color: #5f6368; margin-bottom: 12px;
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    [data-theme="dark"] .folder-section-label { color: #6060a0; }
+    .folder-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .folder-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      cursor: default;
+      transition: box-shadow 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+    }
+    .folder-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+    [data-theme="dark"] .folder-card { background: #1e1e26; border-color: #2e2e3a; }
+    [data-theme="dark"] .folder-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+    .folder-icon { font-size: 22px; flex-shrink: 0; }
+    .folder-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.4;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .folder-badge {
+      position: absolute;
+      top: 6px; right: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.03em;
+    }
+    .badge-s1 { background: #e6f4ea; color: #137333; }
+    .badge-s2 { background: #fef7e0; color: #8a5c00; }
+    .badge-s3 { background: #fce8e6; color: #9a1e16; }
+    [data-theme="dark"] .badge-s1 { background: #0c2a14; color: #4ade80; }
+    [data-theme="dark"] .badge-s2 { background: #2a2000; color: #fcd34d; }
+    [data-theme="dark"] .badge-s3 { background: #2a0c0a; color: #f87171; }
+
+    /* ── Structure Tree ── */
+    .tree-wrapper {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .tree-header {
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 14px; font-weight: 700;
+      color: var(--text);
+    }
+    .tree-body { padding: 16px 20px; }
+    .tree-node {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      margin: 3px 0;
+      position: relative;
+    }
+    .tree-indent { flex-shrink: 0; }
+    .tree-guide {
+      display: inline-block;
+      width: 24px;
+      text-align: center;
+      color: #c0c0cc;
+      font-size: 15px;
+      line-height: 1.8;
+      flex-shrink: 0;
+    }
+    .tree-content {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      flex-grow: 1;
+      cursor: default;
+    }
+    .tree-content:hover { background: var(--surface2); }
+    .tree-icon { font-size: 16px; flex-shrink: 0; }
+    .tree-label {
+      font-size: 14px;
+      color: var(--text);
+      font-weight: 500;
+    }
+    .tree-desc {
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-left: 4px;
+    }
+    .tree-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .tag-s1 { background: #e6f4ea; color: #137333; }
+    .tag-s2 { background: #fef7e0; color: #8a5c00; }
+    .tag-s3 { background: #fce8e6; color: #9a1e16; }
+    .tag-admin { background: #e8f0fe; color: #1967D2; }
+    [data-theme="dark"] .tag-s1 { background: #0c2a14; color: #4ade80; }
+    [data-theme="dark"] .tag-s2 { background: #2a2000; color: #fcd34d; }
+    [data-theme="dark"] .tag-s3 { background: #2a0c0a; color: #f87171; }
+    [data-theme="dark"] .tag-admin { background: #0e1a3a; color: #93c5fd; }
+    .tree-divider { height: 1px; background: var(--border); margin: 10px 0; }
+
+    /* ── Naming Convention ── */
+    .rule-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .rule-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+    [data-theme="dark"] .rule-card { background: #1e1e26; border-color: #2e2e3a; }
+    .rule-number {
+      width: 28px; height: 28px;
+      background: #1462FC;
+      color: #fff;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .rule-title {
+      font-size: 15px; font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .rule-body {
+      font-size: 13px;
+      color: var(--text-sub);
+      line-height: 1.65;
+    }
+    .rule-example {
+      margin-top: 10px;
+      background: var(--surface2);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+    }
+    .good { color: #137333; }
+    .bad { color: #9a1e16; text-decoration: line-through; }
+    [data-theme="dark"] .good { color: #4ade80; }
+    [data-theme="dark"] .bad { color: #f87171; }
+
+    /* ── Access Matrix ── */
+    .matrix-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      font-size: 14px;
+    }
+    .matrix-table thead th {
+      background: var(--surface2);
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 700;
+      color: var(--text-sub);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+    .matrix-table tbody td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+    }
+    .matrix-table tbody tr:last-child td { border-bottom: none; }
+    .matrix-table tbody tr:hover td { background: var(--surface2); }
+    .level-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 13px; font-weight: 700;
+    }
+    .l-s1 { background: #e6f4ea; color: #137333; border: 1px solid #34A853; }
+    .l-s2 { background: #fef7e0; color: #8a5c00; border: 1px solid #F9AB00; }
+    .l-s3 { background: #fce8e6; color: #9a1e16; border: 1px solid #EA4335; }
+    [data-theme="dark"] .l-s1 { background: #0c2a14; border-color: #1e7e34; color: #4ade80; }
+    [data-theme="dark"] .l-s2 { background: #2a2000; border-color: #8a6000; color: #fcd34d; }
+    [data-theme="dark"] .l-s3 { background: #2a0c0a; border-color: #9a1e16; color: #f87171; }
+    .who-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .who-chip {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    /* ── Callout ── */
+    .callout {
+      display: flex; gap: 14px;
+      padding: 16px 20px;
+      border-radius: 10px;
+      border-left: 4px solid;
+      margin-top: 20px;
+    }
+    .callout-info { background: #e8f0fe; border-color: #4285F4; }
+    .callout-tip  { background: #e6f4ea; border-color: #34A853; }
+    [data-theme="dark"] .callout-info { background: #0e1a3a; border-color: #4285F4; }
+    [data-theme="dark"] .callout-tip  { background: #0c2a14; border-color: #34A853; }
+    .callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .callout-text { font-size: 14px; color: var(--text); line-height: 1.65; }
+    .callout-text strong { font-weight: 700; }
+
+    /* ── Theme Toggle ── */
+    #themeToggle {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      width: 48px; height: 48px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.14);
+      font-size: 22px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: box-shadow 0.2s;
+      z-index: 100;
+    }
+    #themeToggle:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.2); }
+
+    /* ── Responsive ── */
+    @media (max-width: 680px) {
+      .gdrive-body { grid-template-columns: 1fr; }
+      .gdrive-sidebar { display: none; }
+      .folder-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<button id="themeToggle" title="테마 변경" aria-label="다크/라이트 모드 전환">🌙</button>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-badge">📁 HR Gdrive 가이드</div>
+  <h1>HR팀 Google Drive<br>폴더 구조 설계안</h1>
+  <p class="hero-sub">보안 레벨별 폴더 계층 + 일관된 명명 규칙으로<br>팀 전체가 쉽게 찾고 관리할 수 있는 드라이브를 만들어요.</p>
+</div>
+
+<main class="main">
+
+  <!-- 보안 레벨 범례 -->
+  <section>
+    <h2 class="section-title">🔐 접근 레벨 (Security Level)</h2>
+    <p class="section-sub">Google 공식 가이드는 상위 폴더를 보안 레벨로 나누고, 하위에 기능별 폴더를 두는 구조를 권장합니다.<br>HR Gdrive의 최상위 3개 폴더가 이 역할을 담당합니다.</p>
+    <div class="legend">
+      <span class="legend-chip chip-s1"><span class="dot"></span>S1 전사 공개 — 모든 임직원 조회 가능</span>
+      <span class="legend-chip chip-s2"><span class="dot"></span>S2 HR 내부 — HR팀만 접근</span>
+      <span class="legend-chip chip-s3"><span class="dot"></span>S3 기밀 — HR 리더 + 경영진만 접근</span>
+      <span class="legend-chip chip-s0"><span class="dot"></span>운영 — HR팀 공유 운영 자료</span>
+    </div>
+  </section>
+
+  <!-- Google Drive 목업 -->
+  <section>
+    <h2 class="section-title">🖥️ 드라이브 화면 목업</h2>
+    <p class="section-sub">실제 Google Drive에서 이렇게 보입니다.</p>
+
+    <div class="gdrive-app">
+      <!-- Titlebar -->
+      <div class="gdrive-titlebar">
+        <svg class="gdrive-logo-icon" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg">
+          <path d="m6.6 66.85 3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8h-27.5c0 1.55.4 3.1 1.2 4.5z" fill="#0066da"/>
+          <path d="m43.65 25-13.75-23.8c-1.35.8-2.5 1.9-3.3 3.3l-25.4 44a9.06 9.06 0 0 0 -1.2 4.5h27.5z" fill="#00ac47"/>
+          <path d="m73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5h-27.502l5.852 11.5z" fill="#ea4335"/>
+          <path d="m43.65 25 13.75-23.8c-1.35-.8-2.9-1.2-4.5-1.2h-18.5c-1.6 0-3.15.45-4.5 1.2z" fill="#00832d"/>
+          <path d="m59.8 53h-32.3l-13.75 23.8c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.45 4.5-1.2z" fill="#2684fc"/>
+          <path d="m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3l-13.75 23.8 16.15 27h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/>
+        </svg>
+        <span class="gdrive-logo" style="font-weight:700;font-size:16px;color:#5f6368;">Drive</span>
+        <div class="gdrive-searchbar">
+          <span>🔍</span>
+          <span>드라이브에서 검색</span>
+        </div>
+        <div class="gdrive-avatar">K</div>
+      </div>
+
+      <!-- Body -->
+      <div class="gdrive-body">
+        <!-- Sidebar -->
+        <div class="gdrive-sidebar">
+          <div class="sidebar-new-btn">
+            <span>➕</span> 새로 만들기
+          </div>
+          <div class="sidebar-item">🏠 홈</div>
+          <div class="sidebar-item">⏱️ 최근 문서</div>
+          <div class="sidebar-item">⭐ 중요 문서함</div>
+          <div class="sidebar-item">🖥️ 내 드라이브</div>
+          <div class="sidebar-divider"></div>
+          <div class="sidebar-section">공유 드라이브</div>
+          <div class="sidebar-item active" style="border-radius:0 100px 100px 0; padding-left:24px;">
+            <span>📁</span> HR Gdrive
+          </div>
+          <div class="sidebar-divider"></div>
+          <div class="sidebar-item">🗑️ 휴지통</div>
+          <div class="sidebar-item">☁️ 저장용량</div>
+        </div>
+
+        <!-- Main -->
+        <div class="gdrive-main">
+          <div class="gdrive-breadcrumb">
+            <span>HR Gdrive</span>
+          </div>
+
+          <div class="folder-section-label">최상위 폴더</div>
+          <div class="folder-grid">
+            <div class="folder-card">
+              <span class="folder-icon">📁</span>
+              <span class="folder-name">00. _HR_운영</span>
+              <span class="folder-badge badge-s2">HR내부</span>
+            </div>
+            <div class="folder-card" style="border-color:#34A853;">
+              <span class="folder-icon">📗</span>
+              <span class="folder-name">01. HR_Public (S1)</span>
+              <span class="folder-badge badge-s1">전사공개</span>
+            </div>
+            <div class="folder-card" style="border-color:#F9AB00;">
+              <span class="folder-icon">📙</span>
+              <span class="folder-name">02. HR_Internal (S2)</span>
+              <span class="folder-badge badge-s2">HR내부</span>
+            </div>
+            <div class="folder-card" style="border-color:#EA4335;">
+              <span class="folder-icon">📕</span>
+              <span class="folder-name">03. HR_Conf (S3)</span>
+              <span class="folder-badge badge-s3">기밀</span>
+            </div>
+          </div>
+
+          <div class="folder-section-label">01. HR_Public (S1) 내부 예시</div>
+          <div class="folder-grid">
+            <div class="folder-card">
+              <span class="folder-icon">📁</span>
+              <span class="folder-name">채용 & 온보딩</span>
+            </div>
+            <div class="folder-card">
+              <span class="folder-icon">📁</span>
+              <span class="folder-name">복리후생 안내</span>
+            </div>
+            <div class="folder-card">
+              <span class="folder-icon">📁</span>
+              <span class="folder-name">HRD</span>
+            </div>
+            <div class="folder-card">
+              <span class="folder-icon">📁</span>
+              <span class="folder-name">사내 공지</span>
+            </div>
+            <div class="folder-card">
+              <span class="folder-icon">📁</span>
+              <span class="folder-name">뉴스 스크래핑</span>
+            </div>
+            <div class="folder-card">
+              <span class="folder-icon">📁</span>
+              <span class="folder-name">HR 가이드</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 전체 폴더 트리 -->
+  <section>
+    <h2 class="section-title">🗂️ 전체 폴더 구조 트리</h2>
+    <p class="section-sub">HR팀 Google Drive 권장 구조 전체안입니다. 현황에 맞게 조정해서 사용하세요.</p>
+
+    <div class="tree-wrapper">
+      <div class="tree-header">
+        <span>📁</span>
+        <span>HR Gdrive (공유 드라이브)</span>
+      </div>
+      <div class="tree-body">
+
+        <!-- 00 운영 -->
+        <div class="tree-node">
+          <div class="tree-content">
+            <span class="tree-icon">📁</span>
+            <span class="tree-label">00. _HR_운영</span>
+            <span class="tree-desc">HR팀 팀 운영 내부 자료</span>
+            <span class="tree-tag tag-admin">HR내부</span>
+          </div>
+        </div>
+        <div class="tree-node">
+          <div class="tree-guide">├</div>
+          <div class="tree-content">
+            <span class="tree-icon">📁</span>
+            <span class="tree-label">미팅 노트</span>
+          </div>
+        </div>
+        <div class="tree-node">
+          <div class="tree-guide">├</div>
+          <div class="tree-content">
+            <span class="tree-icon">📁</span>
+            <span class="tree-label">OKR / 팀 목표</span>
+          </div>
+        </div>
+        <div class="tree-node">
+          <div class="tree-guide">└</div>
+          <div class="tree-content">
+            <span class="tree-icon">📁</span>
+            <span class="tree-label">템플릿 & 양식</span>
+          </div>
+        </div>
+
+        <div class="tree-divider"></div>
+
+        <!-- 01 공개 -->
+        <div class="tree-node">
+          <div class="tree-content">
+            <span class="tree-icon">📗</span>
+            <span class="tree-label">01. HR_Public (S1)</span>
+            <span class="tree-desc">전사 임직원 조회 가능</span>
+            <span class="tree-tag tag-s1">S1 전사공개</span>
+          </div>
+        </div>
+        <div class="tree-node">
+          <div class="tree-guide">├</div>
+          <div class="tree-content">
+            <span class="tree-icon">📁</span>
+            <span class="tree-label">채용 & 온보딩</span>
+            <span class="tree-desc">공개 JD, 온보딩 자료</span>
+          </div>
+        </div>
+        <div class="tree-node">
+          <div class="tree-guide">├</div>
+          <div class="tree-content">
+            <span class="tree-icon">📁</span>
+            <span class="tree-label">복리후생 안내</span>
+            <span class="tree-desc">식대·경조사·보험 등</span>
+          </div>
+        </div>
+        <div class="tree-node">
+          <div class="tree-guide">├</div>
+          <div class="tree-content">
+            <span class="tree-icon">📁</span>
+            <span class="tree-label">HRD (교육개발)</span>
+          </div>
+        </div>
+        <div class="tree-node">
+          <div class="tree-guide" style="padding-left:24px;">├</div>
+          <div class="tree-content">
+            <span class="tree-icon">📁</span>
+            <span class="tree-label">Claude Courses</span>
+            <span class="tree-desc">AI 교육 강의 자료</span>
+          </div>
+        </div>
+        <div class="tree-node">
+          <div class="tree-guide" style="padding-left:24px;">└</div>
+          <div class="tree-content">
+            <span class="tree-icon">📁</span>
+            <span class="tree-label">교육 자료 (기타)</span>
+          </div>
+        </div>
+        <div class="tree-node">
+          <div class="tree-guide">├</div>
+          <div class="tree-content">
+            <span class="tree-icon">📁</span>
+            <span class="tree-label">뉴스 스크래핑</span>
+            <span class="tree-desc">e-rainbow 월간 자료</span>
+          </div>
+        </div>
+        <div class="tree-node">
+          <div class="tree-guide">└</div>
+          <div class="tree-content">
+            <span class="tree-icon">📁</span>
+            <span class="tree-label">HR 가이드 & 공지</span>
+            <span class="tree-desc">각종 사내 가이드 문서</span>
+          </div>
+        </div>
+
+        <div class="tree-divider"></div>
+
+        <!-- 02 내부 -->
+        <div class="tree-node">
+          <div class="tree-content">
+            <span class="tree-icon">📙</span>
+            <span class="tree-label">02. HR_Internal (S2)</span>
+            <span class="tree-desc">HR팀 멤버만 접근</span>
+            <span class="tree-tag tag-s2">S2 HR내부</span>
+          </div>
+        </div>
+        <div class="tree-node">
+          <div class="tree-guide">├</div>
+          <div class="tree-content">
+            <span class="tree-icon">📁</span>
+            <span class="tree-label">인사 데이터 & 현황</span>
+            <span class="tree-desc">조직도, 인원 현황</span>
+          </div>
+        </div>
+        <div class="tree-node">
+          <div class="tree-guide">├</div>
+          <div class="tree-content">
+            <span class="tree-icon">📁</span>
+            <span class="tree-label">채용 파이프라인</span>
+            <span class="tree-desc">후보자 내부 검토 자료</span>
+          </div>
+        </div>
+        <div class="tree-node">
+          <div class="tree-guide">├</div>
+          <div class="tree-content">
+            <span class="tree-icon">📁</span>
+            <span class="tree-label">성과 관리</span>
+            <span class="tree-desc">평가 시트, 리뷰 자료</span>
+          </div>
+        </div>
+        <div class="tree-node">
+          <div class="tree-guide">└</div>
+          <div class="tree-content">
+            <span class="tree-icon">📁</span>
+            <span class="tree-label">사내 이벤트 운영</span>
+            <span class="tree-desc">행사 기획 내부 문서</span>
+          </div>
+        </div>
+
+        <div class="tree-divider"></div>
+
+        <!-- 03 기밀 -->
+        <div class="tree-node">
+          <div class="tree-content">
+            <span class="tree-icon">📕</span>
+            <span class="tree-label">03. HR_Conf (S3)</span>
+            <span class="tree-desc">HR 리더 + 경영진만 접근</span>
+            <span class="tree-tag tag-s3">S3 기밀</span>
+          </div>
+        </div>
+        <div class="tree-node">
+          <div class="tree-guide">├</div>
+          <div class="tree-content">
+            <span class="tree-icon">📁</span>
+            <span class="tree-label">급여 & 보상 체계</span>
+          </div>
+        </div>
+        <div class="tree-node">
+          <div class="tree-guide">├</div>
+          <div class="tree-content">
+            <span class="tree-icon">📁</span>
+            <span class="tree-label">조직 전략 & 인력계획</span>
+          </div>
+        </div>
+        <div class="tree-node">
+          <div class="tree-guide">└</div>
+          <div class="tree-content">
+            <span class="tree-icon">📁</span>
+            <span class="tree-label">징계 & 법적 문서</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="callout callout-info" style="margin-top:16px;">
+      <span class="callout-icon">💡</span>
+      <p class="callout-text">
+        <strong>폴더 깊이 제한:</strong> Google은 폴더 중첩을 최대 100단계까지 허용하지만, 실제로는 <strong>4단계 이내</strong>로 유지하는 것을 권장합니다. 너무 깊으면 탐색이 어렵고 공유 링크도 복잡해집니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- 명명 규칙 -->
+  <section>
+    <h2 class="section-title">✏️ 폴더·파일 명명 규칙</h2>
+    <p class="section-sub">Google 공식 가이드를 기반으로 HR팀에 맞게 정리한 5가지 규칙입니다.</p>
+
+    <div class="rule-grid">
+      <div class="rule-card">
+        <div class="rule-number">1</div>
+        <div class="rule-title">번호 접두사로 순서 고정</div>
+        <div class="rule-body">폴더 정렬 순서가 이름순이므로, <code>01.</code> <code>02.</code>처럼 번호를 붙여 순서를 고정합니다.</div>
+        <div class="rule-example">
+          <div class="good">✅ 01. HR_Public (S1)</div>
+          <div class="good">✅ 02. HR_Internal (S2)</div>
+          <div class="bad">❌ HR Public</div>
+        </div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-number">2</div>
+        <div class="rule-title">보안 레벨 명시 (최상위만)</div>
+        <div class="rule-body">최상위 폴더 이름에 <code>(S1)</code> <code>(S2)</code> <code>(S3)</code>을 붙여 접근 레벨을 한눈에 파악합니다.</div>
+        <div class="rule-example">
+          <div class="good">✅ 02. HR_Internal (S2)</div>
+          <div class="bad">❌ HR 내부용 자료</div>
+        </div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-number">3</div>
+        <div class="rule-title">날짜는 YYYYMMDD 형식</div>
+        <div class="rule-body">파일에 날짜가 필요할 때는 <code>20260401</code> 형식을 사용합니다. 이렇게 해야 정렬 시 날짜 순서가 정확합니다.</div>
+        <div class="rule-example">
+          <div class="good">✅ 20260401_채용공고_백엔드.pdf</div>
+          <div class="bad">❌ 채용공고_4월1일.pdf</div>
+        </div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-number">4</div>
+        <div class="rule-title">완료 자료는 _Archive 폴더로</div>
+        <div class="rule-body">사용이 끝난 파일은 삭제하지 말고 해당 폴더 내 <code>_Archive</code> 서브폴더로 이동합니다. 폴더명 앞 <code>_</code>는 맨 아래로 정렬됩니다.</div>
+        <div class="rule-example">
+          <div class="good">✅ _Archive/2025_채용자료</div>
+          <div class="bad">❌ 파일 삭제 또는 방치</div>
+        </div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-number">5</div>
+        <div class="rule-title">띄어쓰기 대신 _ 또는 공백 통일</div>
+        <div class="rule-body">팀 내에서 한 가지 방식으로 통일합니다. 검색과 URL 공유 시 띄어쓰기가 문제될 수 있으니 <code>_</code> 사용을 권장합니다.</div>
+        <div class="rule-example">
+          <div class="good">✅ HR_Public, HRD_교육자료</div>
+          <div class="bad">❌ HR Public, HRD교육자료(혼용)</div>
+        </div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-number">6</div>
+        <div class="rule-title">민감 자료는 별도 제한 폴더</div>
+        <div class="rule-body">S3 기밀 폴더는 공유 드라이브 내에서도 멤버 권한을 따로 설정할 수 있습니다. 폴더 우클릭 → 공유 → 해당 폴더만 제한.</div>
+        <div class="rule-example">
+          <div class="good">✅ 03. HR_Conf (S3) — 리더만 접근</div>
+          <div class="bad">❌ 모든 HR팀에게 동일 권한 부여</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 접근 권한 매트릭스 -->
+  <section>
+    <h2 class="section-title">🔑 접근 권한 매트릭스</h2>
+    <p class="section-sub">누가 어떤 폴더에 접근할 수 있는지 한눈에 정리한 표입니다.</p>
+
+    <table class="matrix-table">
+      <thead>
+        <tr>
+          <th>폴더</th>
+          <th>레벨</th>
+          <th>접근 가능한 사람</th>
+          <th>주요 내용</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>00. _HR_운영</strong></td>
+          <td><span class="level-badge l-s2">HR내부</span></td>
+          <td>
+            <div class="who-chips">
+              <span class="who-chip">HR팀 전체</span>
+            </div>
+          </td>
+          <td>팀 미팅 노트, OKR, 업무 템플릿</td>
+        </tr>
+        <tr>
+          <td><strong>01. HR_Public (S1)</strong></td>
+          <td><span class="level-badge l-s1">S1 전사공개</span></td>
+          <td>
+            <div class="who-chips">
+              <span class="who-chip">전 임직원</span>
+              <span class="who-chip">조회 가능</span>
+            </div>
+          </td>
+          <td>채용공고, 온보딩, 복리후생, 교육자료, 공지</td>
+        </tr>
+        <tr>
+          <td><strong>02. HR_Internal (S2)</strong></td>
+          <td><span class="level-badge l-s2">S2 HR내부</span></td>
+          <td>
+            <div class="who-chips">
+              <span class="who-chip">HR팀 멤버</span>
+            </div>
+          </td>
+          <td>인사 데이터, 채용 파이프라인, 성과 관리, 이벤트 운영</td>
+        </tr>
+        <tr>
+          <td><strong>03. HR_Conf (S3)</strong></td>
+          <td><span class="level-badge l-s3">S3 기밀</span></td>
+          <td>
+            <div class="who-chips">
+              <span class="who-chip">HR 리더</span>
+              <span class="who-chip">경영진</span>
+            </div>
+          </td>
+          <td>급여·보상, 조직 전략, 인력계획, 법적 문서</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-tip" style="margin-top:16px;">
+      <span class="callout-icon">🌿</span>
+      <p class="callout-text">
+        <strong>공유 드라이브 멤버 권한 팁:</strong> 공유 드라이브 멤버는 기본적으로 드라이브 내 모든 폴더에 접근 가능합니다. S3 기밀 폴더는 해당 폴더에서 <strong>별도로 접근 제한을 걸고</strong>, 나머지 멤버는 "콘텐츠 관리자" 권한에서 해당 폴더 접근만 차단하세요.
+      </p>
+    </div>
+  </section>
+
+  <!-- 레퍼런스 -->
+  <section>
+    <h2 class="section-title">📎 참고 레퍼런스</h2>
+    <p class="section-sub">이 설계안은 아래 Google 공식 가이드를 기반으로 작성했습니다.</p>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <a href="https://support.google.com/a/users/answer/9310349?hl=en" target="_blank" rel="noopener"
+         style="display:flex;align-items:center;gap:10px;padding:14px 18px;background:var(--surface);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);font-size:14px;">
+        <span>📄</span>
+        <span><strong>Google Drive 파일·폴더 정리 가이드</strong> — 명명 규칙, 색상, 단축키</span>
+        <span style="margin-left:auto;color:#4285F4;font-size:12px;">↗</span>
+      </a>
+      <a href="https://support.google.com/a/users/answer/13015138?hl=en" target="_blank" rel="noopener"
+         style="display:flex;align-items:center;gap:10px;padding:14px 18px;background:var(--surface);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);font-size:14px;">
+        <span>📄</span>
+        <span><strong>공유 드라이브 운영 팁</strong> — naming conventions, [Archive]/[Internal]/[External] 예시</span>
+        <span style="margin-left:auto;color:#4285F4;font-size:12px;">↗</span>
+      </a>
+      <a href="https://support.google.com/a/users/answer/7338880?hl=en-IE" target="_blank" rel="noopener"
+         style="display:flex;align-items:center;gap:10px;padding:14px 18px;background:var(--surface);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);font-size:14px;">
+        <span>📄</span>
+        <span><strong>공유 드라이브 제한사항</strong> — 최대 500,000개 항목, 폴더 100단계 깊이</span>
+        <span style="margin-left:auto;color:#4285F4;font-size:12px;">↗</span>
+      </a>
+    </div>
+  </section>
+
+  <footer style="margin-top:64px;padding-top:24px;border-top:1px solid var(--border);text-align:center;font-size:13px;color:var(--text-sub);">
+    제작: HR팀 &nbsp;·&nbsp; <a href="index.html" style="color:#4285F4;text-decoration:none;">HRD Center 홈으로</a>
+  </footer>
+
+</main>
+
+<script>
+  (function() {
+    var saved = localStorage.getItem('gdrive-guide-theme') || 'light';
+    var root = document.getElementById('html-root');
+    if (saved === 'dark') {
+      root.setAttribute('data-theme', 'dark');
+      var btn = document.getElementById('themeToggle');
+      if (btn) btn.textContent = '☀️';
+    }
+  })();
+
+  document.getElementById('themeToggle').addEventListener('click', function() {
+    var root = document.getElementById('html-root');
+    var isDark = root.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+      root.removeAttribute('data-theme');
+      this.textContent = '🌙';
+      localStorage.setItem('gdrive-guide-theme', 'light');
+    } else {
+      root.setAttribute('data-theme', 'dark');
+      this.textContent = '☀️';
+      localStorage.setItem('gdrive-guide-theme', 'dark');
+    }
+  });
+</script>
+</body>
+</html>
