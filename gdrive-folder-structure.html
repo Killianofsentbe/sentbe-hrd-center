@@ -8,17 +8,32 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--color-g100, #F7F8FB);
-      color: var(--color-g900, #1A1A1A);
-      min-height: 100vh;
+    /* ── Design Tokens: Light (default) ── */
+    :root {
+      --page-bg:   #F7F8FB;
+      --surface:   #ffffff;
+      --surface2:  #f0f2f7;
+      --border:    #e3e6eb;
+      --text:      #1A1A1A;
+      --text-sub:  #525357;
     }
 
-    /* ── Dark Mode ── */
-    [data-theme="dark"] body { background: #0d0d10; color: #e8e8ec; }
-    [data-theme="dark"] { --page-bg: #0d0d10; --surface: #16161c; --surface2: #1e1e26; --border: #2e2e3a; --text: #e8e8ec; --text-sub: #9090a0; }
-    :root { --page-bg: #F7F8FB; --surface: #ffffff; --surface2: #f0f2f7; --border: #e3e6eb; --text: #1A1A1A; --text-sub: #525357; }
+    /* ── Design Tokens: Dark ── */
+    [data-theme="dark"] {
+      --page-bg:   #0d0d10;
+      --surface:   #16161c;
+      --surface2:  #1e1e26;
+      --border:    #2e2e3a;
+      --text:      #e8e8ec;
+      --text-sub:  #9090a0;
+    }
+
+    body {
+      font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--page-bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
 
     /* ── Hero ── */
     .hero {
@@ -40,10 +55,9 @@
       position: absolute;
       bottom: -1px; left: 0; right: 0;
       height: 52px;
-      background: var(--page-bg, #F7F8FB);
+      background: var(--page-bg);
       clip-path: ellipse(55% 100% at 50% 100%);
     }
-    [data-theme="dark"] .hero::after { background: #0d0d10; }
 
     .hero-badge {
       display: inline-flex;
@@ -230,25 +244,22 @@
 
     /* Main content */
     .gdrive-main {
-      background: var(--page-bg, #f8f9fa);
+      background: var(--surface2);
       padding: 20px 24px;
     }
-    [data-theme="dark"] .gdrive-main { background: #12121a; }
     .gdrive-breadcrumb {
       display: flex; align-items: center; gap: 4px;
       font-size: 20px; font-weight: 700;
-      color: #202124; margin-bottom: 20px;
+      color: var(--text); margin-bottom: 20px;
     }
-    [data-theme="dark"] .gdrive-breadcrumb { color: #e8e8ec; }
     .breadcrumb-sep { color: #9aa0a6; font-size: 16px; margin: 0 2px; }
 
     /* Folder Grid */
     .folder-section-label {
       font-size: 12px; font-weight: 600;
-      color: #5f6368; margin-bottom: 12px;
+      color: var(--text-sub); margin-bottom: 12px;
       text-transform: uppercase; letter-spacing: 0.04em;
     }
-    [data-theme="dark"] .folder-section-label { color: #6060a0; }
     .folder-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -268,7 +279,6 @@
       position: relative;
     }
     .folder-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
-    [data-theme="dark"] .folder-card { background: #1e1e26; border-color: #2e2e3a; }
     [data-theme="dark"] .folder-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
     .folder-icon { font-size: 22px; flex-shrink: 0; }
     .folder-name {
@@ -279,6 +289,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      max-width: calc(100% - 52px); /* 배지 겹침 방지 */
     }
     .folder-badge {
       position: absolute;
@@ -380,7 +391,6 @@
       border-radius: 12px;
       padding: 18px 20px;
     }
-    [data-theme="dark"] .rule-card { background: #1e1e26; border-color: #2e2e3a; }
     .rule-number {
       width: 28px; height: 28px;
       background: #1462FC;
