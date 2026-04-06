@@ -230,9 +230,84 @@
     @media (max-width: 560px) {
       .os-cards { grid-template-columns: 1fr; }
     }
+
+    /* ── Theme Toggle ── */
+    .theme-toggle-btn {
+      position: fixed;
+      top: 16px; right: 16px;
+      z-index: 1000;
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.28);
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      user-select: none;
+    }
+    .theme-toggle-btn:hover {
+      background: rgba(255,255,255,0.28);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+    [data-theme="dark"] .theme-toggle-btn {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.14);
+    }
+    [data-theme="dark"] .theme-toggle-btn:hover {
+      background: rgba(255,255,255,0.14);
+    }
+
+    /* ── Dark Mode ── */
+    [data-theme="dark"] body {
+      background: #0d0d10;
+      color: #f0f0f5;
+    }
+    [data-theme="dark"] .section-title {
+      color: #f0f0f5;
+    }
+    [data-theme="dark"] .os-card {
+      background: #16161c;
+      border-color: #2a2a35;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    [data-theme="dark"] .os-card:hover {
+      border-color: #4285F4;
+      box-shadow: 0 12px 40px rgba(66,133,244,0.2);
+    }
+    [data-theme="dark"] .os-card h2 { color: #f0f0f5; }
+    [data-theme="dark"] .os-card p  { color: #88889a; }
+    [data-theme="dark"] .info-card {
+      background: #16161c;
+      border-color: #2a2a35;
+    }
+    [data-theme="dark"] .info-card h3 { color: #f0f0f5; }
+    [data-theme="dark"] .info-card p  { color: #88889a; }
+    [data-theme="dark"] .compare-table {
+      background: #16161c;
+      border-color: #2a2a35;
+    }
+    [data-theme="dark"] .compare-table td {
+      color: #d0d0dc;
+      border-bottom-color: #2a2a35;
+    }
+    [data-theme="dark"] .compare-table tr:nth-child(even) td {
+      background: #1a1a22;
+    }
+    [data-theme="dark"] .compare-table .feature-label { color: #f0f0f5; }
+    [data-theme="dark"] .callout-info {
+      background: #141c30;
+      border-color: #1e3060;
+      color: #c8d8f8;
+    }
   </style>
 </head>
 <body>
+
+  <button class="theme-toggle-btn" id="themeToggle" title="라이트/다크 모드 전환">🌙</button>
 
   <!-- Hero -->
   <div class="hero">
@@ -360,5 +435,26 @@
     </p>
   </footer>
 
+  <script>
+    (function() {
+      const saved = localStorage.getItem('gdrive-guide-theme') || 'light';
+      if (saved === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.getElementById('themeToggle').textContent = '☀️';
+      }
+    })();
+    document.getElementById('themeToggle').addEventListener('click', function() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        document.documentElement.removeAttribute('data-theme');
+        this.textContent = '🌙';
+        localStorage.setItem('gdrive-guide-theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        this.textContent = '☀️';
+        localStorage.setItem('gdrive-guide-theme', 'dark');
+      }
+    });
+  </script>
 </body>
 </html>

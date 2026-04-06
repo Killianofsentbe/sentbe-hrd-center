@@ -536,9 +536,107 @@
       font-size: 13px; line-height: 1.8;
     }
     .footer a { color: #0A84FF; text-decoration: none; }
+
+    /* ── Theme Toggle ── */
+    .theme-toggle-btn {
+      position: fixed;
+      top: 16px; right: 16px;
+      z-index: 1000;
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      user-select: none;
+    }
+    .theme-toggle-btn:hover {
+      background: rgba(255,255,255,0.2);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+    }
+    [data-theme="dark"] .theme-toggle-btn {
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.12);
+    }
+
+    /* ── Dark Mode ── */
+    [data-theme="dark"] body {
+      background: #0d0d10;
+      color: #f0f0f5;
+    }
+    /* hero::after 는 페이지 배경색과 맞춰야 함 */
+    [data-theme="dark"] .hero::after {
+      background: #0d0d10;
+    }
+    [data-theme="dark"] .section-title { color: #f0f0f5; }
+    [data-theme="dark"] .step-header h3 { color: #f0f0f5; }
+    [data-theme="dark"] .step-desc { color: #b0b0c0; }
+    /* DMG 창은 white → dark */
+    [data-theme="dark"] .dmg-window { background: #1c1c22; }
+    [data-theme="dark"] .dmg-titlebar {
+      background: #2a2a32;
+      border-bottom-color: rgba(255,255,255,0.06);
+    }
+    [data-theme="dark"] .dmg-title { color: #d0d0dc; }
+    [data-theme="dark"] .dmg-body {
+      background: linear-gradient(135deg, #1e2030 0%, #16182a 100%);
+    }
+    [data-theme="dark"] .dmg-item-name { color: #d0d0dc; }
+    [data-theme="dark"] .dmg-arrow { color: #555566; }
+    /* Info cards */
+    [data-theme="dark"] .info-card {
+      background: #16161c;
+      border-color: #2a2a35;
+    }
+    [data-theme="dark"] .info-card h3 { color: #f0f0f5; }
+    [data-theme="dark"] .info-card p  { color: #88889a; }
+    /* Callouts */
+    [data-theme="dark"] .callout-info {
+      background: #141c30;
+      border-color: #1e3060;
+      color: #c8d8f8;
+    }
+    [data-theme="dark"] .callout-warn {
+      background: #241c08;
+      border-color: #6a5000;
+      color: #e8d080;
+    }
+    [data-theme="dark"] .callout-success {
+      background: #0c2216;
+      border-color: #1a5a28;
+      color: #80d898;
+    }
+    /* FAQ */
+    [data-theme="dark"] .faq-item {
+      background: #16161c;
+      border-color: #2a2a35;
+    }
+    [data-theme="dark"] .faq-a {
+      border-top-color: #2a2a35;
+      color: #88889a;
+    }
+    /* Shortcut cards */
+    [data-theme="dark"] .shortcut-card {
+      background: #16161c;
+      border-color: #2a2a35;
+    }
+    [data-theme="dark"] .key {
+      background: #2a2a35;
+      border-color: #3a3a4a;
+      border-bottom-color: #4a4a5a;
+      color: #d0d0dc;
+    }
+    [data-theme="dark"] .shortcut-label { color: #88889a; }
   </style>
 </head>
 <body>
+
+  <button class="theme-toggle-btn" id="themeToggle" title="라이트/다크 모드 전환">🌙</button>
 
   <!-- Hero -->
   <div class="hero">
@@ -943,6 +1041,25 @@
   </footer>
 
   <script>
+    (function() {
+      const saved = localStorage.getItem('gdrive-guide-theme') || 'light';
+      if (saved === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.getElementById('themeToggle').textContent = '☀️';
+      }
+    })();
+    document.getElementById('themeToggle').addEventListener('click', function() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        document.documentElement.removeAttribute('data-theme');
+        this.textContent = '🌙';
+        localStorage.setItem('gdrive-guide-theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        this.textContent = '☀️';
+        localStorage.setItem('gdrive-guide-theme', 'dark');
+      }
+    });
     document.querySelectorAll('.faq-q').forEach(q => {
       q.addEventListener('click', () => q.closest('.faq-item').classList.toggle('open'));
     });
