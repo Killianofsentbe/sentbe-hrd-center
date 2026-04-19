@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Use Cases from a Non-Developer's Perspective — Killian, HR</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    --navy:   #122666;
+    --blue:   #0156FC;
+    --blue-lt:#4d88fd;
+    --text:   #1a1a2e;
+    --sub:    #6B7280;
+    --border: #E5E8F0;
+    --bg:     #F8F9FC;
+    --white:  #ffffff;
+    --toc-w:  260px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 15px;
+  }
+
+  /* ── 레이아웃 ── */
+  .layout {
+    display: flex;
+    min-height: 100vh;
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 24px;
+    gap: 48px;
+  }
+
+  /* ── TOC 사이드바 ── */
+  .toc {
+    width: var(--toc-w);
+    flex-shrink: 0;
+    position: sticky;
+    top: 40px;
+    align-self: flex-start;
+    padding: 32px 0;
+  }
+  .toc-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--sub);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .toc-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .toc-list a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--sub);
+    transition: background 0.15s, color 0.15s;
+    line-height: 1.4;
+  }
+  .toc-list a:hover { background: var(--border); color: var(--navy); }
+  .toc-list a.active { background: rgba(1,86,252,0.08); color: var(--blue); font-weight: 700; }
+  .toc-num {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--blue);
+    background: rgba(1,86,252,0.1);
+    border-radius: 4px;
+    padding: 1px 6px;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .toc-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 12px 0;
+  }
+  .toc-meta {
+    margin-top: 20px;
+    padding: 14px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 12px;
+    color: var(--sub);
+    line-height: 1.8;
+  }
+  .toc-meta strong { color: var(--navy); font-weight: 700; }
+
+  /* ── 메인 콘텐츠 ── */
+  .main {
+    flex: 1;
+    padding: 48px 0 96px;
+    min-width: 0;
+  }
+
+  /* ── 문서 헤더 ── */
+  .doc-header {
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 2px solid var(--navy);
+  }
+  .doc-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--blue);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: rgba(1,86,252,0.08);
+    border: 1px solid rgba(1,86,252,0.18);
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-bottom: 16px;
+  }
+  .doc-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 12px;
+  }
+  .doc-subtitle {
+    font-size: 16px;
+    color: var(--sub);
+    font-weight: 500;
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  .doc-meta-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .doc-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--sub);
+    font-weight: 500;
+  }
+  .doc-meta-item span {
+    color: var(--navy);
+    font-weight: 700;
+  }
+  .meta-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+
+  /* ── 섹션 ── */
+  .section {
+    margin-bottom: 56px;
+    scroll-margin-top: 40px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .section-num {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--blue);
+    background: rgba(1,86,252,0.08);
+    border: 1px solid rgba(1,86,252,0.18);
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    margin-top: 4px;
+    letter-spacing: 0.04em;
+  }
+  .section-title-wrap {}
+  .section-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+  }
+  .section-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--sub);
+    margin-top: 3px;
+  }
+
+  /* ── 본문 요소 ── */
+  p { margin-bottom: 14px; color: #374151; line-height: 1.85; }
+  p:last-child { margin-bottom: 0; }
+
+  ul, ol {
+    padding-left: 20px;
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  li { color: #374151; line-height: 1.75; }
+  li::marker { color: var(--blue); }
+
+  strong { color: var(--navy); font-weight: 700; }
+
+  /* ── 인용 블록 ── */
+  .quote-block {
+    border-left: 3px solid var(--blue);
+    background: rgba(1,86,252,0.04);
+    padding: 16px 20px;
+    border-radius: 0 10px 10px 0;
+    margin: 20px 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.7;
+  }
+
+  /* ── 카드 그리드 ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .card-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--blue);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .card-body {
+    font-size: 13px;
+    color: var(--sub);
+    line-height: 1.7;
+  }
+
+  /* ── 콜아웃 박스 ── */
+  .callout {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-left: 4px solid var(--navy);
+    border-radius: 0 12px 12px 0;
+    padding: 18px 20px;
+    margin: 20px 0;
+  }
+  .callout.blue { border-left-color: var(--blue); background: rgba(1,86,252,0.03); }
+  .callout.green { border-left-color: #34A853; background: rgba(52,168,83,0.03); }
+  .callout.amber { border-left-color: #F59E0B; background: rgba(245,158,11,0.03); }
+  .callout-title {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    color: var(--navy);
+  }
+  .callout.blue .callout-title { color: var(--blue); }
+  .callout.green .callout-title { color: #34A853; }
+  .callout.amber .callout-title { color: #D97706; }
+
+  /* ── 플로우 체인 ── */
+  .flow-chain {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin: 16px 0;
+    padding: 16px 18px;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+  }
+  .flow-item {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    background: rgba(1,86,252,0.07);
+    border: 1px solid rgba(1,86,252,0.15);
+    padding: 5px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .flow-arrow {
+    font-size: 14px;
+    color: var(--sub);
+  }
+
+  /* ── 워크플로우 테이블 ── */
+  .wf-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1.5px solid var(--border);
+  }
+  .wf-table th {
+    background: var(--navy);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 10px 16px;
+    text-align: left;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .wf-table td {
+    padding: 11px 16px;
+    font-size: 13px;
+    color: #374151;
+    border-bottom: 1px solid var(--border);
+  }
+  .wf-table tr:last-child td { border-bottom: none; }
+  .wf-table tr:nth-child(even) td { background: var(--bg); }
+  .wf-step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    background: var(--blue);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+  .tool-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--navy);
+    background: rgba(1,86,252,0.07);
+    border: 1px solid rgba(1,86,252,0.15);
+    padding: 2px 9px;
+    border-radius: 100px;
+    margin: 2px;
+  }
+
+  /* ── 섹션 구분자 ── */
+  .section-divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 56px;
+  }
+
+  /* ── 클로징 ── */
+  .closing-box {
+    background: linear-gradient(135deg, var(--navy) 0%, #1e3a8a 100%);
+    border-radius: 16px;
+    padding: 36px 40px;
+    color: #fff;
+  }
+  .closing-box p { color: rgba(255,255,255,0.85); }
+  .closing-box strong { color: #fff; }
+  .closing-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+  .closing-line {
+    width: 40px; height: 3px;
+    background: var(--blue-lt);
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+  .closing-sign {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* ── 스크롤 진행 바 ── */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--blue);
+    width: 0%;
+    transition: width 0.1s;
+    z-index: 100;
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<div class="layout">
+
+  <!-- TOC 사이드바 -->
+  <aside class="toc">
+    <div class="toc-label">Contents</div>
+    <ul class="toc-list">
+      <li><a href="#s1"><span class="toc-num">#1</span> Opening</a></li>
+      <li><a href="#s2"><span class="toc-num">#2</span> Agenda</a></li>
+      <li><a href="#s3"><span class="toc-num">#3</span> AI Before</a></li>
+      <li><a href="#s31"><span class="toc-num">#3-1</span> Workflow Diagram</a></li>
+      <li><a href="#s5"><span class="toc-num">#5</span> Gemini 3.0</a></li>
+      <li><a href="#s6"><span class="toc-num">#6</span> Claude Code</a></li>
+      <li><a href="#s7"><span class="toc-num">#7</span> NotebookLM</a></li>
+      <div class="toc-divider"></div>
+      <li><a href="#s81"><span class="toc-num">#8-1</span> Limitations</a></li>
+      <li><a href="#s82"><span class="toc-num">#8-2</span> The Upside</a></li>
+      <li><a href="#s83"><span class="toc-num">#8-3</span> Key Question</a></li>
+      <li><a href="#s84"><span class="toc-num">#8-4</span> Closing</a></li>
+    </ul>
+
+    <div class="toc-meta">
+      <strong>Killian (Oseung Kwon)</strong><br>
+      HR Team · SentBe<br>
+      <br>
+      Built with<br>
+      Claude Code + Canva MCP
+    </div>
+  </aside>
+
+  <!-- 메인 콘텐츠 -->
+  <main class="main">
+
+    <!-- 문서 헤더 -->
+    <div class="doc-header">
+      <div class="doc-kicker">Session Document · HR Team</div>
+      <h1 class="doc-title">AI Use Cases from a<br>Non-Developer's Perspective</h1>
+      <p class="doc-subtitle">A walkthrough of how I moved from using AI as a search tool to using it as a build tool — and what that shift looks like in practice.</p>
+      <div class="doc-meta-row">
+        <div class="doc-meta-item">Presenter <span>Killian, HR Team</span></div>
+        <div class="meta-dot"></div>
+        <div class="doc-meta-item">Language <span>English</span></div>
+        <div class="meta-dot"></div>
+        <div class="doc-meta-item">Slides <span>12 slides</span></div>
+      </div>
+    </div>
+
+    <!-- #1 Opening -->
+    <section class="section" id="s1">
+      <div class="section-header">
+        <div class="section-num">#1</div>
+        <div class="section-title-wrap">
+          <div class="section-title">Opening</div>
+          <div class="section-tag">Title Slide</div>
+        </div>
+      </div>
+      <p>Hi everyone, I'm Killian from the HR team. Today I'd like to share how I've been using AI in my day-to-day work.</p>
+      <p>Just so you know — <strong>this presentation itself was built using Claude Code and Canva MCP.</strong> It took me a while to put the content together, but the slides? Only a few minutes to produce.</p>
+      <p>As a non-developer, my approach to AI isn't about writing code — it's about imagining what I want, then using AI to make it real.</p>
+    </section>
+    <div class="section-divider"></div>
+
+    <!-- #2 Agenda -->
+    <section class="section" id="s2">
+      <div class="section-header">
+        <div class="section-num">#2</div>
+        <div class="section-title-wrap">
+          <div class="section-title">Agenda</div>
+        </div>
+      </div>
+      <ol>
+        <li>How I used AI before</li>
+        <li>How I use AI now — Gemini, Claude Code, NotebookLM</li>
+        <li>Wrap-up</li>
+      </ol>
+    </section>
+    <div class="section-divider"></div>
+
+    <!-- #3 AI Before -->
+    <section class="section" id="s3">
+      <div class="section-header">
+        <div class="section-num">#3</div>
+        <div class="section-title-wrap">
+          <div class="section-title">How I Used AI Before</div>
+        </div>
+      </div>
+
+      <p>Late 2022 — ChatGPT launched and I immediately shifted from Googling everything to asking ChatGPT and verifying the answer. That alone unlocked things I couldn't do before: Slack bots via AppScript, Excel automation, small scripts that used to require a developer.</p>
+
+      <p>As more models emerged — Gemini, Perplexity, Grok — I started learning to use each one for what it does best, rather than paying for a single subscription:</p>
+
+      <ul>
+        <li><strong>Perplexity + Grok</strong> — real-time research and fact-checking</li>
+        <li><strong>Gemini</strong> — strategy planning and workflow mapping</li>
+        <li><strong>ChatGPT</strong> — English translation and copy polishing</li>
+        <li><strong>Gemini + Perplexity + Grok</strong> — triple-checking outputs for accuracy</li>
+      </ul>
+
+      <div class="callout blue">
+        <div class="callout-title">Key Insight</div>
+        Maximising each model's strength and only paying for what you actually need is a strategy in itself. It also pushed me to think beyond just "doing tasks faster" — I started thinking about <strong>user experience</strong>: not just building things for myself, but building things that others can actually use.
+      </div>
+    </section>
+    <div class="section-divider"></div>
+
+    <!-- #3-1 Workflow -->
+    <section class="section" id="s31">
+      <div class="section-header">
+        <div class="section-num">#3-1</div>
+        <div class="section-title-wrap">
+          <div class="section-title">Multi-Model AI Workflow</div>
+          <div class="section-tag">Diagram Slide</div>
+        </div>
+      </div>
+      <p>Here's how the workflow looks in practice — four steps, each with the best-fit model:</p>
+
+      <table class="wf-table">
+        <thead>
+          <tr><th>Step</th><th>Task</th><th>Tool(s)</th><th>Why</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="wf-step">1</span></td>
+            <td><strong>Research</strong></td>
+            <td><span class="tool-chip">Perplexity</span><span class="tool-chip">Grok</span></td>
+            <td>Real-time web data, source-cited answers</td>
+          </tr>
+          <tr>
+            <td><span class="wf-step">2</span></td>
+            <td><strong>Strategy & Planning</strong></td>
+            <td><span class="tool-chip">Gemini</span></td>
+            <td>Structured thinking, Google Workspace integration</td>
+          </tr>
+          <tr>
+            <td><span class="wf-step">3</span></td>
+            <td><strong>Translation & Polishing</strong></td>
+            <td><span class="tool-chip">ChatGPT</span></td>
+            <td>Natural English output, tone refinement</td>
+          </tr>
+          <tr>
+            <td><span class="wf-step">4</span></td>
+            <td><strong>Triple Verification</strong></td>
+            <td><span class="tool-chip">Gemini</span><span class="tool-chip">Perplexity</span><span class="tool-chip">Grok</span></td>
+            <td>Cross-check across models to reduce error</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout">
+        <div class="callout-title">Core Principle</div>
+        Minimise paid subscriptions · Use each model's strengths · Design for others, not just yourself
+      </div>
+    </section>
+    <div class="section-divider"></div>
+
+    <!-- #5 Gemini -->
+    <section class="section" id="s5">
+      <div class="section-header">
+        <div class="section-num">#5</div>
+        <div class="section-title-wrap">
+          <div class="section-title">Gemini 3.0</div>
+          <div class="section-tag">Recent AI Usage</div>
+        </div>
+      </div>
+
+      <p>Gemini 3.0 was a significant leap. The deeper Google Workspace integration now means direct control over Docs, Sheets, and Drive — which makes it much more useful for actual work, not just chat.</p>
+
+      <div class="callout green">
+        <div class="callout-title">Biggest Advantage for SentBe</div>
+        Gemini Pro is now <strong>included in our existing Google Workspace paid plan</strong>. That makes it the only AI tool currently available company-wide — zero additional cost.
+      </div>
+
+      <p>Beyond the basics, we're using the <strong>Gem</strong> feature to build lightweight custom AI assistants:</p>
+      <ul>
+        <li>Benefits receipt review</li>
+        <li>IT asset request document assistance</li>
+        <li>Internal document review support</li>
+      </ul>
+
+      <p>Gemini also connects directly to <strong>NotebookLM</strong> — which I'll explain in a moment.</p>
+    </section>
+    <div class="section-divider"></div>
+
+    <!-- #6 Claude Code -->
+    <section class="section" id="s6">
+      <div class="section-header">
+        <div class="section-num">#6</div>
+        <div class="section-title-wrap">
+          <div class="section-title">Claude Code</div>
+          <div class="section-tag">Recent AI Usage</div>
+        </div>
+      </div>
+
+      <p>I started using Claude Code in late March 2026. At first, I had no idea what it could actually do. Setting up the MCP connections for Google, Slack, and Atlassian was a painful trial-and-error process — but looking back, that struggle gave me a much deeper understanding of how the system works.</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-label">Before Claude Code</div>
+          <div class="card-title">Tools in silos</div>
+          <div class="card-body">Constantly switching between Chrome tabs, apps, and documents to get anything done</div>
+        </div>
+        <div class="card">
+          <div class="card-label">After Claude Code</div>
+          <div class="card-title">WorkOS</div>
+          <div class="card-body">All tools connected through a single interface. Claude handles coordination in the middle</div>
+        </div>
+      </div>
+
+      <p>One of the first things I found genuinely useful: clipping resources with <strong>Obsidian</strong>, then asking Claude Code to organise the folders. Still use it daily.</p>
+
+      <p>But the real unlock came from a project I didn't plan — it just snowballed:</p>
+
+      <div class="callout blue">
+        <div class="callout-title">Case Study — "Claude Courses KO" Project</div>
+      </div>
+
+      <div class="flow-chain">
+        <span class="flow-item">Crawling is easy with Claude</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-item">Anthropic's courses are English-only</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-item">Google Translate isn't good enough</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-item">Let me build it myself</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-item">Built with Claude</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-item">Others should see this</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-item">GitHub Pages</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-item">Guide page</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-item">Landing page</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-item">NotebookLM chatbots</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-item">Deployed ✓</span>
+      </div>
+
+      <p>The site is live at: <a href="https://killianofsentbe.github.io/ai-education-claudecourses/landing.html" style="color:var(--blue);font-weight:600;">killianofsentbe.github.io/ai-education-claudecourses</a><br>
+      Currently maintaining 17 courses — most recently adding Claude Code 101.</p>
+
+      <p>This project represents the shift I mentioned earlier. Before Claude, I used AI to help <em>me</em> make better things. With Claude, AI actually <strong>builds the output directly</strong>. I focus on what to make; Claude figures out how.</p>
+    </section>
+    <div class="section-divider"></div>
+
+    <!-- #7 NotebookLM -->
+    <section class="section" id="s7">
+      <div class="section-header">
+        <div class="section-num">#7</div>
+        <div class="section-title-wrap">
+          <div class="section-title">NotebookLM</div>
+          <div class="section-tag">Recent AI Usage</div>
+        </div>
+      </div>
+
+      <p>NotebookLM is an online research and note-taking tool developed by Google Labs. It stands apart from other AI tools for one key reason:</p>
+
+      <div class="quote-block">
+        "No hallucinations — answers are grounded strictly in the documents you provide. If your source is accurate, the answer will be too."
+      </div>
+
+      <p>Because it's Google-based, it's also accessible directly through Gemini, which makes the workflow seamless.</p>
+
+      <div class="callout green">
+        <div class="callout-title">Use Case — Internal Policy Bot</div>
+        <ol style="padding-left:18px;margin-top:8px;">
+          <li>Export Sentree (Notion) + Bebot database content as <code style="background:rgba(0,0,0,0.06);padding:1px 6px;border-radius:4px;font-size:12px;">.md</code> files</li>
+          <li>Upload to NotebookLM</li>
+          <li>Build a Gemini Gem connected to the notebook</li>
+          <li>Deploy → anyone can ask Gemini questions about internal policies at any time</li>
+        </ol>
+        <p style="margin-top:10px;font-size:13px;color:var(--sub);">HR team updates and maintenance handled via Claude.</p>
+      </div>
+
+      <p>The same pattern applies beyond HR: product onboarding, user guides, knowledge bases — anything you want to make queryable in natural language.</p>
+    </section>
+    <div class="section-divider"></div>
+
+    <!-- #8-1 Limitations -->
+    <section class="section" id="s81">
+      <div class="section-header">
+        <div class="section-num">#8-1</div>
+        <div class="section-title-wrap">
+          <div class="section-title">Limitations</div>
+          <div class="section-tag">Wrap-up</div>
+        </div>
+      </div>
+      <p>AI is genuinely useful — but it's not a magic wand:</p>
+      <ol>
+        <li><strong>Clicking a button doesn't make you an expert.</strong> Technical judgment still requires human thought and experience.</li>
+        <li><strong>AI output still needs human decision-making.</strong> Review and iteration are non-negotiable.</li>
+        <li><strong>The initial setup takes real time.</strong> You need dedicated personal time to configure AI for your workflows before it becomes useful.</li>
+        <li><strong>AI adds a new communication layer.</strong> Working with AI effectively requires a learning curve — for you and your team.</li>
+        <li><strong>Security is the most critical issue.</strong> We handle personal data. Using AI responsibly — knowing what goes in and where it goes — is a responsibility we must take seriously.</li>
+      </ol>
+    </section>
+    <div class="section-divider"></div>
+
+    <!-- #8-2 The Upside -->
+    <section class="section" id="s82">
+      <div class="section-header">
+        <div class="section-num">#8-2</div>
+        <div class="section-title-wrap">
+          <div class="section-title">The Upside</div>
+          <div class="section-tag">Wrap-up</div>
+        </div>
+      </div>
+      <p>That said, the growth is real — and it compounds:</p>
+      <ol>
+        <li><strong>You learn what you need, as you need it.</strong> Capability grows organically through doing.</li>
+        <li><strong>Repeated decision-making on AI output elevates your role.</strong> You shift from task-executor to reviewer, director, and decision-maker.</li>
+        <li><strong>Cross-functional understanding follows naturally.</strong> Technical communication with other teams becomes easier over time.</li>
+        <li><strong>Costs and friction decrease as you go.</strong> Once configured, AI remembers the context. Time and credit costs drop steadily.</li>
+        <li><strong>With the right guardrails, the speed gains are dramatic.</strong> Turn off data training. Stay within defined boundaries. If we address the personal data challenge together, SentBe can build a truly effective AI-ready environment — sooner than we think.</li>
+      </ol>
+    </section>
+    <div class="section-divider"></div>
+
+    <!-- #8-3 Key Question -->
+    <section class="section" id="s83">
+      <div class="section-header">
+        <div class="section-num">#8-3</div>
+        <div class="section-title-wrap">
+          <div class="section-title">The Key Question</div>
+          <div class="section-tag">Wrap-up</div>
+        </div>
+      </div>
+      <div class="quote-block">"The most important thing is still Customer Centric."</div>
+      <p>Making things has gotten much easier — but <strong>usefulness still has to come first.</strong> No matter how fast you can build, it only matters if users actually need it.</p>
+      <p>Marketing sensibility, product thinking, and UX consideration remain essential. AI doesn't replace that judgment — it just removes the bottlenecks that used to slow it down.</p>
+    </section>
+    <div class="section-divider"></div>
+
+    <!-- #8-4 Closing -->
+    <section class="section" id="s84">
+      <div class="section-header">
+        <div class="section-num">#8-4</div>
+        <div class="section-title-wrap">
+          <div class="section-title">Closing</div>
+        </div>
+      </div>
+
+      <div class="closing-box">
+        <div class="closing-title">AI isn't here to replace people.<br>It's here to help people work faster and more easily.</div>
+        <div class="closing-line"></div>
+        <p>I still have a lot to learn — and AI is evolving even faster than I can keep up.</p>
+        <p>But here's what I've found: <strong>one small win is all it takes</strong> to build the confidence that you <em>can</em> do this.</p>
+        <p>You don't need to follow every new development. Pick what's useful, use it within defined boundaries, and I believe everyone can find real value in AI.</p>
+        <div class="closing-sign">Killian (Oseung Kwon) · HR Team · SentBe · 2026</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // 스크롤 진행 바
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total = document.body.scrollHeight - window.innerHeight;
+    document.getElementById('progress').style.width = (scrolled / total * 100) + '%';
+  });
+
+  // TOC 활성 표시
+  const sections = document.querySelectorAll('.section');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        tocLinks.forEach(a => a.classList.remove('active'));
+        const active = document.querySelector(`.toc-list a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
