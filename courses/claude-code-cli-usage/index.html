@@ -3,257 +3,320 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Claude Code CLI 온보딩 | SentBe HRD</title>
+  <title>Claude Code CLI 빠른 시작 | SentBe HRD</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; }
     :root {
-      --blue: #1462FC;
-      --blue-dark: #0C3698;
-      --ink: #151823;
-      --muted: #667085;
-      --bg: #F7F8FB;
+      --sb: #1462FC;
+      --sb-dark: #0C3698;
+      --ink: #141824;
+      --muted: #5F687A;
+      --soft: #F5F7FB;
       --card: #FFFFFF;
-      --line: #E5E7EB;
-      --green: #12B76A;
-      --orange: #F79009;
-      --red: #F04438;
+      --line: #E3E8F0;
+      --ok: #12B76A;
+      --warn: #F79009;
+      --danger: #E5484D;
+      --shadow: 0 16px 44px rgba(20, 24, 36, .10);
     }
+    html { scroll-behavior: smooth; }
     body {
+      margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", "Segoe UI", sans-serif;
-      background: var(--bg);
       color: var(--ink);
-      line-height: 1.6;
+      background: var(--soft);
+      line-height: 1.55;
     }
-    a { color: inherit; text-decoration: none; }
+    a { color: inherit; }
+    button, input { font: inherit; }
+    .shell { max-width: 1180px; margin: 0 auto; padding: 24px 20px 72px; }
+    .topbar {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 16px; padding: 8px 0 22px;
+    }
+    .brand { font-weight: 900; letter-spacing: -.2px; }
+    .status {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 12px; border-radius: 999px;
+      background: #FFF7E8; color: #8A4B00; font-size: 13px; font-weight: 800;
+    }
     .hero {
-      background: radial-gradient(circle at 20% 20%, rgba(255,255,255,.22), transparent 28%),
-                  linear-gradient(135deg, var(--blue-dark), var(--blue));
-      color: #fff;
-      padding: 72px 20px 56px;
-      text-align: center;
-    }
-    .badge {
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      padding: 7px 14px;
-      border: 1px solid rgba(255,255,255,.32);
-      border-radius: 999px;
-      background: rgba(255,255,255,.13);
-      font-size: 13px;
-      font-weight: 700;
+      display: grid; grid-template-columns: 1.05fr .95fr; gap: 22px; align-items: stretch;
       margin-bottom: 22px;
     }
-    .hero h1 {
-      font-size: clamp(32px, 6vw, 56px);
-      line-height: 1.12;
-      letter-spacing: -1.5px;
-      margin-bottom: 18px;
+    .intro, .quick-panel, .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--shadow);
     }
-    .hero p {
-      max-width: 760px;
-      margin: 0 auto 28px;
-      font-size: clamp(16px, 2.4vw, 20px);
-      opacity: .9;
+    .intro { padding: clamp(26px, 5vw, 48px); }
+    .eyebrow { color: var(--sb); font-size: 14px; font-weight: 900; margin-bottom: 12px; }
+    h1 { font-size: clamp(34px, 5vw, 58px); line-height: 1.05; letter-spacing: -1.8px; margin: 0 0 18px; }
+    .lead { font-size: clamp(17px, 2.2vw, 21px); color: var(--muted); max-width: 650px; margin: 0 0 26px; }
+    .promise {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 24px;
     }
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
+    .promise div { background: #F7FAFF; border: 1px solid #D8E5FF; border-radius: 16px; padding: 14px; font-weight: 800; color: #123A78; }
+    .quick-panel { padding: 22px; display: flex; flex-direction: column; gap: 14px; }
+    .quick-panel h2 { margin: 0; font-size: 24px; letter-spacing: -.6px; }
+    .question { color: var(--muted); margin: -6px 0 2px; }
+    .os-grid { display: grid; gap: 12px; }
+    .os-btn {
+      width: 100%; text-align: left; border: 2px solid var(--line); background: #fff;
+      border-radius: 18px; padding: 18px; cursor: pointer; transition: .16s ease;
+      display: grid; grid-template-columns: 48px 1fr auto; gap: 14px; align-items: center;
     }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 48px;
-      padding: 13px 18px;
-      border-radius: 12px;
-      font-weight: 800;
-      box-shadow: 0 10px 24px rgba(12,54,152,.18);
+    .os-btn:hover, .os-btn.active { border-color: var(--sb); background: #F3F7FF; transform: translateY(-1px); }
+    .os-icon { width: 48px; height: 48px; border-radius: 14px; background: #EDF3FF; display: grid; place-items: center; font-size: 24px; }
+    .os-title { font-size: 18px; font-weight: 900; }
+    .os-desc { color: var(--muted); font-size: 14px; margin-top: 2px; }
+    .arrow { color: var(--sb); font-weight: 900; }
+    .security { border: 1px solid #FFDCA8; background: #FFF9EF; border-radius: 18px; padding: 16px; color: #704000; font-size: 14px; }
+    .security strong { color: #9A5200; }
+    .workflow { display: grid; grid-template-columns: 260px 1fr; gap: 22px; align-items: start; }
+    .sticky { position: sticky; top: 18px; display: grid; gap: 10px; }
+    .nav-card { padding: 16px; }
+    .nav-card h3 { margin: 0 0 10px; font-size: 16px; }
+    .nav-link { display: block; padding: 10px 12px; border-radius: 12px; text-decoration: none; color: var(--muted); font-weight: 750; }
+    .nav-link:hover { background: #F2F6FF; color: var(--sb-dark); }
+    .main-flow { display: grid; gap: 18px; }
+    .section { padding: 26px; scroll-margin-top: 24px; }
+    .section h2 { margin: 0 0 8px; font-size: clamp(24px, 3vw, 34px); letter-spacing: -.9px; }
+    .section > p { color: var(--muted); margin: 0 0 18px; }
+    .install-card { border: 2px solid #D8E5FF; background: #FAFCFF; border-radius: 20px; padding: 20px; }
+    .install-head { display: flex; justify-content: space-between; align-items: start; gap: 16px; margin-bottom: 14px; }
+    .install-head h3 { margin: 0; font-size: 22px; }
+    .tag { display: inline-flex; padding: 6px 10px; border-radius: 999px; background: #EAF2FF; color: var(--sb-dark); font-size: 12px; font-weight: 900; white-space: nowrap; }
+    .steps { display: grid; gap: 12px; counter-reset: step; }
+    .step { display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: start; }
+    .step::before { counter-increment: step; content: counter(step); width: 34px; height: 34px; border-radius: 50%; background: var(--sb); color: #fff; display: grid; place-items: center; font-weight: 900; }
+    .step strong { display: block; margin-bottom: 4px; }
+    .step span { color: var(--muted); }
+    pre { position: relative; margin: 10px 0 0; padding: 16px; border-radius: 14px; background: #101828; color: #F2F4F7; overflow: auto; font-size: 14px; }
+    code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    .copy-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
+    .copy-btn, .primary-action, .secondary-action {
+      border: 0; border-radius: 12px; padding: 12px 15px; cursor: pointer; font-weight: 900; text-decoration: none; display: inline-flex; justify-content: center; align-items: center; min-height: 44px;
     }
-    .btn.primary { background: #fff; color: var(--blue-dark); }
-    .btn.secondary { background: rgba(255,255,255,.14); color: #fff; border: 1px solid rgba(255,255,255,.32); }
-    .wrap { max-width: 1120px; margin: 0 auto; padding: 38px 20px 72px; }
-    .notice {
-      border: 1px solid #FEDF89;
-      background: #FFFAEB;
-      border-radius: 16px;
-      padding: 18px 20px;
-      margin-bottom: 26px;
-      color: #7A4A00;
-    }
-    .notice strong { color: #93370D; }
-    .section { margin-top: 34px; }
-    .section h2 { font-size: 26px; letter-spacing: -.5px; margin-bottom: 14px; }
-    .section-sub { color: var(--muted); margin-bottom: 18px; }
-    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 22px;
-      box-shadow: 0 1px 2px rgba(16,24,40,.04), 0 12px 30px rgba(16,24,40,.06);
-    }
-    .card h3 { font-size: 20px; margin-bottom: 8px; }
-    .card p { color: var(--muted); margin-bottom: 16px; }
-    .pill {
-      display: inline-flex;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: #EEF4FF;
-      color: var(--blue-dark);
-      font-size: 12px;
-      font-weight: 800;
-      margin-bottom: 12px;
-    }
-    .link-list { display: grid; gap: 10px; margin-top: 12px; }
-    .link {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid var(--line);
-      background: #fff;
-      font-weight: 750;
-    }
-    .link:hover { border-color: #B2CCFF; background: #F5F8FF; }
-    .steps { counter-reset: step; display: grid; gap: 12px; }
-    .step {
-      position: relative;
-      padding-left: 54px;
-      min-height: 42px;
-    }
-    .step::before {
-      counter-increment: step;
-      content: counter(step);
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--blue);
-      color: #fff;
-      display: grid;
-      place-items: center;
-      font-weight: 900;
-    }
-    code, pre {
-      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-    }
-    pre {
-      background: #101828;
-      color: #EAECF0;
-      padding: 16px;
-      border-radius: 14px;
-      overflow: auto;
-      margin-top: 12px;
-      font-size: 13px;
-    }
-    .metric { font-size: 30px; font-weight: 900; color: var(--blue-dark); }
-    .footer { color: var(--muted); text-align: center; margin-top: 46px; font-size: 14px; }
-    @media (max-width: 820px) {
-      .grid, .grid.three { grid-template-columns: 1fr; }
-      .hero { padding-top: 54px; }
+    .copy-btn { background: #EAF2FF; color: var(--sb-dark); }
+    .primary-action { background: var(--sb); color: #fff; }
+    .secondary-action { background: #fff; color: var(--sb-dark); border: 1px solid #BBD2FF; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .hidden { display: none !important; }
+    .experience { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .mini { border: 1px solid var(--line); border-radius: 18px; padding: 18px; background: #fff; }
+    .mini h3 { margin: 0 0 8px; }
+    .mini p { color: var(--muted); margin: 0; }
+    .success-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 16px; }
+    .success-list div { padding: 12px; border-radius: 14px; background: #F0FFF8; border: 1px solid #BAF0D4; color: #075E38; font-weight: 800; }
+    .help-box { background: #FFF7F7; border: 1px solid #FFD1D1; border-radius: 18px; padding: 18px; }
+    .help-box h3 { color: #9B1C1C; margin-top: 0; }
+    .footer { color: var(--muted); text-align: center; padding-top: 34px; font-size: 14px; }
+    .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: #101828; color: white; padding: 12px 16px; border-radius: 12px; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: .18s ease; font-weight: 800; }
+    .toast.show { opacity: 1; }
+    @media (max-width: 920px) {
+      .hero, .workflow, .experience { grid-template-columns: 1fr; }
+      .sticky { position: static; }
+      .promise, .success-list { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <header class="hero">
-    <div class="badge">🧪 테스트 배포 · Claude Code CLI Onboarding</div>
-    <h1>내 컴퓨터에서 일하는 Claude를<br>10분 안에 경험하기</h1>
-    <p>OS별 설치 → 첫 실행 → 로컬 파일을 읽고 README.md를 직접 생성하는 체험까지 한 번에 진행합니다.</p>
-    <div class="hero-actions">
-      <a class="btn primary" href="install-guide/START_HERE.html">먼저 보기</a>
-      <a class="btn secondary" href="#choose-os">내 OS 선택하기</a>
-      <a class="btn secondary" href="install-guide/faq.html">막혔어요</a>
-    </div>
-  </header>
-
-  <main class="wrap">
-    <div class="notice">
-      <strong>중요:</strong> 이 페이지는 테스트 배포입니다. 원클릭 설치 스크립트는 IT/보안 검토 전까지 파일럿 초안으로만 사용하세요. 민감정보·고객정보·인증키가 있는 폴더에서 실행하지 마세요.
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">SentBe HRD · Claude Code CLI</div>
+      <div class="status">테스트 배포</div>
     </div>
 
-    <section id="choose-os" class="section">
-      <h2>1. 내 OS에 맞게 시작하기</h2>
-      <p class="section-sub">Windows 사용자는 우선 Native Windows 방식을 권장합니다. WSL은 개발자/자동화 고급 사용자용입니다.</p>
-      <div class="grid">
-        <article class="card">
-          <span class="pill">macOS</span>
-          <h3>Mac 사용자</h3>
-          <p>터미널에서 공식 설치 명령을 실행하고 첫 실습 폴더로 이동합니다.</p>
-          <div class="link-list">
-            <a class="link" href="install-guide/os-install-guide.html">macOS 설치 가이드 <span>→</span></a>
-            <a class="link" href="install-guide/macos-install-claude-code.command">macOS 설치 스크립트 초안 <span>↓</span></a>
-          </div>
-        </article>
-        <article class="card">
-          <span class="pill">Windows</span>
-          <h3>Windows 사용자</h3>
-          <p>PowerShell Native 설치를 기본으로 진행합니다. CMD/WSL과 헷갈리지 않게 안내합니다.</p>
-          <div class="link-list">
-            <a class="link" href="install-guide/os-install-guide.html">Windows 설치 가이드 <span>→</span></a>
-            <a class="link" href="install-guide/windows-install-claude-code.ps1">Windows 설치 스크립트 초안 <span>↓</span></a>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="section">
-      <h2>2. 첫 10분 체험</h2>
-      <p class="section-sub">웹/앱 Claude와 달리 CLI는 현재 폴더의 파일을 직접 읽고 결과 파일을 생성합니다.</p>
-      <div class="card">
-        <div class="steps">
-          <div class="step"><strong>sample-files 폴더를 바탕화면에 복사</strong><br>제공된 memo와 todo CSV로 안전하게 실습합니다.</div>
-          <div class="step"><strong>터미널/PowerShell에서 폴더로 이동 후 claude 실행</strong><br><code>claude</code> 명령으로 Claude Code CLI를 시작합니다.</div>
-          <div class="step"><strong>README.md 생성 요청</strong><br>Claude가 파일을 읽고 요약/담당자별 할 일/다음 액션을 로컬 파일로 만듭니다.</div>
-        </div>
-        <pre>memo1.md, memo2.md, todo.csv를 읽고 README.md를 만들어줘.
-README에는 1) 핵심 요약 2) 담당자별 할 일 3) 다음 액션을 넣어줘.</pre>
-        <div class="link-list">
-          <a class="link" href="install-guide/sample-files/memo1.md">샘플 memo1.md <span>→</span></a>
-          <a class="link" href="install-guide/sample-files/todo.csv">샘플 todo.csv <span>→</span></a>
+    <section class="hero">
+      <div class="intro">
+        <div class="eyebrow">빠르게 적용하고 싶은 사람을 위한 페이지</div>
+        <h1>내 OS만 고르면<br>바로 설치 단계로 갑니다</h1>
+        <p class="lead">문서를 뒤지지 않아도 됩니다. 아래에서 Mac 또는 Windows를 선택하면 필요한 명령어, 확인 방법, 첫 체험 미션까지 한 화면에서 진행합니다.</p>
+        <div class="promise">
+          <div>1. OS 선택</div>
+          <div>2. 명령어 복사</div>
+          <div>3. README 생성 체험</div>
         </div>
       </div>
+
+      <aside class="quick-panel" aria-label="OS 선택">
+        <h2>무엇으로 시작할까요?</h2>
+        <p class="question">대부분은 여기서 하나만 누르면 됩니다.</p>
+        <div class="os-grid">
+          <button class="os-btn active" data-os="mac" type="button">
+            <span class="os-icon">⌘</span>
+            <span><span class="os-title">Mac 사용자</span><span class="os-desc">회사 지급 맥북 / macOS</span></span>
+            <span class="arrow">보기</span>
+          </button>
+          <button class="os-btn" data-os="win" type="button">
+            <span class="os-icon">⊞</span>
+            <span><span class="os-title">Windows 사용자</span><span class="os-desc">PowerShell Native 설치 권장</span></span>
+            <span class="arrow">보기</span>
+          </button>
+          <button class="os-btn" data-os="wsl" type="button">
+            <span class="os-icon">⌁</span>
+            <span><span class="os-title">Windows 개발자 / WSL</span><span class="os-desc">고급 사용자용 선택지</span></span>
+            <span class="arrow">보기</span>
+          </button>
+        </div>
+        <div class="security"><strong>주의:</strong> 원클릭 스크립트는 아직 파일럿 초안입니다. IT 검토 전에는 공식 명령어 수동 실행을 기본으로 합니다.</div>
+      </aside>
     </section>
 
-    <section class="section">
-      <h2>3. 배포/파일럿 운영</h2>
-      <p class="section-sub">전사 확산 전, 설치 성공률과 보안 이슈를 관리합니다.</p>
-      <div class="grid three">
-        <article class="card"><div class="metric">85%</div><p>전체 설치 성공률 Go 기준</p></article>
-        <article class="card"><div class="metric">75%</div><p>Windows 설치 성공률 Go 기준</p></article>
-        <article class="card"><div class="metric">80%</div><p>첫 체험 미션 완료율 Go 기준</p></article>
-      </div>
-      <div class="link-list">
-        <a class="link" href="install-guide/rollout/deployment-plan-v2.html">배포계획 v2 보기 <span>→</span></a>
-        <a class="link" href="install-guide/rollout/pilot-checklist.md">파일럿 체크리스트 보기 <span>→</span></a>
-        <a class="link" href="install-guide/rollout/slack-announcement-template.md">Slack 공지 템플릿 보기 <span>→</span></a>
-      </div>
-    </section>
+    <section class="workflow">
+      <aside class="sticky">
+        <div class="card nav-card">
+          <h3>바로가기</h3>
+          <a class="nav-link" href="#install">설치하기</a>
+          <a class="nav-link" href="#verify">설치 확인</a>
+          <a class="nav-link" href="#first-run">첫 실행</a>
+          <a class="nav-link" href="#mission">첫 10분 체험</a>
+          <a class="nav-link" href="#help">막혔을 때</a>
+        </div>
+        <div class="card nav-card">
+          <h3>상세 문서</h3>
+          <a class="nav-link" href="install-guide/os-install-guide.html">OS별 전체 가이드</a>
+          <a class="nav-link" href="install-guide/faq.html">FAQ / 지원 동선</a>
+          <a class="nav-link" href="install-guide/rollout/deployment-plan-v2.html">배포계획 v2</a>
+        </div>
+      </aside>
 
-    <section class="section">
-      <h2>4. 막혔을 때</h2>
-      <div class="card">
-        <p>오류 메시지를 혼자 해석하려고 오래 붙잡지 말고, 아래 템플릿으로 지원 요청을 남기면 됩니다.</p>
-        <pre>[Claude Code CLI 설치 지원 요청]
+      <main class="main-flow">
+        <section id="install" class="card section">
+          <h2>1. 설치하기</h2>
+          <p>선택한 OS에 맞는 명령어만 복사해서 실행하세요.</p>
+
+          <div class="install-card os-content" data-content="mac">
+            <div class="install-head"><h3>Mac 설치</h3><span class="tag">추천 경로</span></div>
+            <div class="steps">
+              <div class="step"><div><strong>터미널 열기</strong><span>Cmd + Space → Terminal 입력 → Enter</span></div></div>
+              <div class="step"><div><strong>아래 명령어 실행</strong><span>공식 Native Install 명령입니다.</span><div class="copy-row"><pre><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre><button class="copy-btn" data-copy="curl -fsSL https://claude.ai/install.sh | bash">복사</button></div></div></div>
+              <div class="step"><div><strong>터미널 재시작</strong><span>명령어 인식이 안 되면 터미널을 닫았다가 다시 여세요.</span></div></div>
+            </div>
+            <div class="actions"><a class="secondary-action" href="install-guide/macos-install-claude-code.command">Mac 설치 스크립트 초안 다운로드</a></div>
+          </div>
+
+          <div class="install-card os-content hidden" data-content="win">
+            <div class="install-head"><h3>Windows 설치</h3><span class="tag">PowerShell 권장</span></div>
+            <div class="steps">
+              <div class="step"><div><strong>PowerShell 열기</strong><span>시작 메뉴 → PowerShell 검색 → Windows PowerShell 실행. 프롬프트가 <code>PS C:\</code>로 시작해야 합니다.</span></div></div>
+              <div class="step"><div><strong>아래 명령어 실행</strong><span>PowerShell용 공식 Native Install 명령입니다.</span><div class="copy-row"><pre><code>irm https://claude.ai/install.ps1 | iex</code></pre><button class="copy-btn" data-copy="irm https://claude.ai/install.ps1 | iex">복사</button></div></div></div>
+              <div class="step"><div><strong>PowerShell 재시작</strong><span><code>claude</code> 명령 인식이 안 되면 PowerShell을 닫았다가 다시 여세요.</span></div></div>
+            </div>
+            <div class="actions"><a class="secondary-action" href="install-guide/windows-install-claude-code.ps1">Windows 설치 스크립트 초안 다운로드</a></div>
+          </div>
+
+          <div class="install-card os-content hidden" data-content="wsl">
+            <div class="install-head"><h3>Windows WSL 설치</h3><span class="tag">고급 사용자용</span></div>
+            <div class="steps">
+              <div class="step"><div><strong>PowerShell 관리자 권한으로 WSL 설치</strong><span>PC 재부팅이 필요할 수 있습니다.</span><div class="copy-row"><pre><code>wsl --install</code></pre><button class="copy-btn" data-copy="wsl --install">복사</button></div></div></div>
+              <div class="step"><div><strong>Ubuntu에서 Claude Code 설치</strong><span>WSL Ubuntu 터미널 안에서 실행합니다.</span><div class="copy-row"><pre><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre><button class="copy-btn" data-copy="curl -fsSL https://claude.ai/install.sh | bash">복사</button></div></div></div>
+              <div class="step"><div><strong>프로젝트는 /home 아래에 두기</strong><span><code>/mnt/c</code>보다 <code>/home/사용자명</code> 경로가 안정적입니다.</span></div></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="verify" class="card section">
+          <h2>2. 설치 확인</h2>
+          <p>아래 명령어 결과로 버전이 보이면 설치 성공입니다.</p>
+          <div class="copy-row"><pre><code>claude --version</code></pre><button class="copy-btn" data-copy="claude --version">복사</button></div>
+          <div class="success-list">
+            <div>성공 예시: claude-code x.x.x</div>
+            <div>실패 시: 터미널/PowerShell 재시작 후 재시도</div>
+          </div>
+        </section>
+
+        <section id="first-run" class="card section">
+          <h2>3. 첫 실행</h2>
+          <p>실습 전용 폴더에서만 실행합니다. 홈 폴더/회사 Drive 전체/민감정보 폴더에서 시작하지 마세요.</p>
+          <div class="os-content" data-content="mac">
+            <div class="copy-row"><pre><code>mkdir -p ~/Desktop/claude-code-practice
+cd ~/Desktop/claude-code-practice
+claude</code></pre><button class="copy-btn" data-copy="mkdir -p ~/Desktop/claude-code-practice
+cd ~/Desktop/claude-code-practice
+claude">복사</button></div>
+          </div>
+          <div class="os-content hidden" data-content="win">
+            <div class="copy-row"><pre><code>mkdir $HOME\Desktop\claude-code-practice
+cd $HOME\Desktop\claude-code-practice
+claude</code></pre><button class="copy-btn" data-copy="mkdir $HOME\Desktop\claude-code-practice
+cd $HOME\Desktop\claude-code-practice
+claude">복사</button></div>
+          </div>
+          <div class="os-content hidden" data-content="wsl">
+            <div class="copy-row"><pre><code>mkdir -p ~/claude-code-practice
+cd ~/claude-code-practice
+claude</code></pre><button class="copy-btn" data-copy="mkdir -p ~/claude-code-practice
+cd ~/claude-code-practice
+claude">복사</button></div>
+          </div>
+        </section>
+
+        <section id="mission" class="card section">
+          <h2>4. 첫 10분 체험</h2>
+          <p>여기서 “웹/앱 Claude와 뭐가 다른지” 바로 느끼게 하는 게 목표입니다.</p>
+          <div class="experience">
+            <div class="mini"><h3>웹/앱 Claude</h3><p>파일을 직접 올리거나 내용을 복사해서 붙여넣어야 합니다. 결과 파일도 내가 직접 만들어야 합니다.</p></div>
+            <div class="mini"><h3>Claude Code CLI</h3><p>현재 폴더 파일을 직접 읽고, 정리한 결과를 README.md 파일로 직접 생성합니다.</p></div>
+          </div>
+          <div class="actions">
+            <a class="secondary-action" href="install-guide/sample-files/memo1.md">샘플 memo1</a>
+            <a class="secondary-action" href="install-guide/sample-files/memo2.md">샘플 memo2</a>
+            <a class="secondary-action" href="install-guide/sample-files/todo.csv">샘플 todo.csv</a>
+          </div>
+          <div class="copy-row"><pre><code>memo1.md, memo2.md, todo.csv를 읽고 README.md를 만들어줘.
+README에는 1) 핵심 요약 2) 담당자별 할 일 3) 다음 액션을 넣어줘.</code></pre><button class="copy-btn" data-copy="memo1.md, memo2.md, todo.csv를 읽고 README.md를 만들어줘.
+README에는 1) 핵심 요약 2) 담당자별 할 일 3) 다음 액션을 넣어줘.">복사</button></div>
+        </section>
+
+        <section id="help" class="card section">
+          <h2>5. 막혔을 때</h2>
+          <p>설치에서 막히는 건 정상입니다. 아래 템플릿으로 요청하면 바로 파악할 수 있습니다.</p>
+          <div class="help-box">
+            <h3>지원 요청 템플릿</h3>
+            <div class="copy-row"><pre><code>[Claude Code CLI 설치 지원 요청]
 1. OS: Windows 11 / macOS / 기타
-2. 사용한 문서: 예) Windows 설치 가이드
-3. 실행한 명령어:
-4. 오류 메시지 또는 캡처:
-5. claude --version 결과:
-6. claude doctor 결과:
-7. 회사 VPN/프록시 사용 여부:</pre>
-        <a class="link" href="install-guide/faq.html">FAQ/지원 동선 보기 <span>→</span></a>
-      </div>
+2. 실행한 명령어:
+3. 오류 메시지 또는 캡처:
+4. claude --version 결과:
+5. PowerShell / CMD / WSL 중 무엇인지:
+6. 회사 VPN/프록시 사용 여부:</code></pre><button class="copy-btn" data-copy="[Claude Code CLI 설치 지원 요청]
+1. OS: Windows 11 / macOS / 기타
+2. 실행한 명령어:
+3. 오류 메시지 또는 캡처:
+4. claude --version 결과:
+5. PowerShell / CMD / WSL 중 무엇인지:
+6. 회사 VPN/프록시 사용 여부:">복사</button></div>
+          </div>
+          <div class="actions"><a class="primary-action" href="install-guide/faq.html">FAQ 보기</a></div>
+        </section>
+      </main>
     </section>
 
-    <p class="footer">SentBe HRD · Claude Code CLI Onboarding · 테스트 배포</p>
-  </main>
+    <p class="footer">테스트 배포 · 전사 확산 전 IT/보안 검토 및 파일럿 필요</p>
+  </div>
+
+  <div class="toast" id="toast">복사했습니다</div>
+  <script>
+    const osButtons = document.querySelectorAll('.os-btn');
+    const osContents = document.querySelectorAll('.os-content');
+    function setOS(os) {
+      osButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.os === os));
+      osContents.forEach(el => el.classList.toggle('hidden', el.dataset.content !== os));
+      document.getElementById('install').scrollIntoView({behavior:'smooth', block:'start'});
+    }
+    osButtons.forEach(btn => btn.addEventListener('click', () => setOS(btn.dataset.os)));
+    const toast = document.getElementById('toast');
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(btn.dataset.copy);
+          toast.classList.add('show');
+          setTimeout(() => toast.classList.remove('show'), 1300);
+        } catch (e) {
+          alert('복사에 실패했습니다. 코드블록을 직접 선택해서 복사해주세요.');
+        }
+      });
+    });
+  </script>
 </body>
 </html>
