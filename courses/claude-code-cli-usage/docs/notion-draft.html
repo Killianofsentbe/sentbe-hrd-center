@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code 완전 초보 가이드 | HRD</title>
+  <link rel="stylesheet" href="../design-tokens.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-pretendard);
+      font-size: var(--fs-16);
+      font-weight: var(--fw-regular);
+      line-height: var(--lh-normal);
+      letter-spacing: var(--ls-normal);
+      color: var(--color-g900);
+      background: var(--color-background);
+    }
+
+    /* ── Layout ── */
+    .page {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: var(--spacing-300) var(--spacing-250);
+    }
+
+    /* ── Header ── */
+    .doc-header {
+      border-bottom: 2px solid var(--color-primary);
+      padding-bottom: var(--spacing-200);
+      margin-bottom: var(--spacing-300);
+    }
+    .doc-header .badge {
+      display: inline-block;
+      background: var(--color-secondary);
+      color: var(--color-on-secondary);
+      font-size: var(--fs-12);
+      font-weight: var(--fw-semibold);
+      padding: 4px 10px;
+      border-radius: var(--radius-circle);
+      margin-bottom: var(--spacing-100);
+    }
+    .doc-header h1 {
+      font-size: var(--fs-32);
+      font-weight: var(--fw-extrabold);
+      line-height: var(--lh-tight);
+      letter-spacing: var(--ls-tight);
+      color: var(--color-g900);
+      margin-bottom: var(--spacing-100);
+    }
+    .doc-header .meta {
+      font-size: var(--fs-13);
+      color: var(--color-g450);
+    }
+
+    /* ── Learning Objectives Box ── */
+    .objectives {
+      background: var(--color-sb150);
+      border-left: 4px solid var(--color-primary);
+      border-radius: var(--radius-100);
+      padding: var(--spacing-200) var(--spacing-250);
+      margin-bottom: var(--spacing-300);
+    }
+    .objectives h2 {
+      font-size: var(--fs-14);
+      font-weight: var(--fw-semibold);
+      color: var(--color-primary);
+      margin-bottom: var(--spacing-100);
+      letter-spacing: var(--ls-tight);
+    }
+    .objectives ol {
+      padding-left: var(--spacing-200);
+    }
+    .objectives li {
+      font-size: var(--fs-14);
+      line-height: var(--lh-normal);
+      margin-bottom: var(--spacing-50);
+      color: var(--color-g700);
+    }
+
+    /* ── Section Headings ── */
+    h2 {
+      font-size: var(--fs-24);
+      font-weight: var(--fw-bold);
+      letter-spacing: var(--ls-tight);
+      line-height: var(--lh-tight);
+      color: var(--color-g900);
+      margin: var(--spacing-300) 0 var(--spacing-150) 0;
+      padding-bottom: var(--spacing-100);
+      border-bottom: 1px solid var(--color-g200);
+    }
+    h3 {
+      font-size: var(--fs-18);
+      font-weight: var(--fw-bold);
+      letter-spacing: var(--ls-tight);
+      color: var(--color-g800);
+      margin: var(--spacing-250) 0 var(--spacing-100) 0;
+    }
+    h4 {
+      font-size: var(--fs-16);
+      font-weight: var(--fw-semibold);
+      color: var(--color-g700);
+      margin: var(--spacing-200) 0 var(--spacing-100) 0;
+    }
+
+    /* ── Body Content ── */
+    p { margin-bottom: var(--spacing-150); color: var(--color-g700); }
+
+    ul, ol {
+      padding-left: var(--spacing-250);
+      margin-bottom: var(--spacing-150);
+    }
+    li {
+      margin-bottom: var(--spacing-50);
+      color: var(--color-g700);
+      line-height: var(--lh-normal);
+    }
+
+    /* ── Callout / Tip ── */
+    blockquote {
+      background: var(--color-g100);
+      border-left: 3px solid var(--color-g350);
+      border-radius: var(--radius-100);
+      padding: var(--spacing-150) var(--spacing-200);
+      margin: var(--spacing-200) 0;
+      color: var(--color-g600);
+      font-size: var(--fs-14);
+    }
+    .callout-tip {
+      background: var(--color-gr100);
+      border-left: 3px solid var(--color-on-positive);
+      border-radius: var(--radius-100);
+      padding: var(--spacing-150) var(--spacing-200);
+      margin: var(--spacing-200) 0;
+      font-size: var(--fs-14);
+      color: var(--color-gr700);
+    }
+    .callout-warning {
+      background: var(--color-warning);
+      border-left: 3px solid var(--color-on-warning);
+      border-radius: var(--radius-100);
+      padding: var(--spacing-150) var(--spacing-200);
+      margin: var(--spacing-200) 0;
+      font-size: var(--fs-14);
+      color: var(--color-o700);
+    }
+
+    /* ── Code ── */
+    pre {
+      background: var(--color-g750);
+      color: var(--color-g50);
+      border-radius: var(--radius-100);
+      padding: var(--spacing-200);
+      overflow-x: auto;
+      margin: var(--spacing-150) 0;
+      font-size: var(--fs-13);
+      line-height: 1.6;
+    }
+    code {
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.9em;
+    }
+    p code, li code {
+      background: var(--color-g150);
+      color: var(--color-sb600);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: var(--fs-13);
+    }
+
+    /* ── Table ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--spacing-200) 0;
+      font-size: var(--fs-14);
+      box-shadow: var(--shadow-white-50);
+      border-radius: var(--radius-100);
+      overflow: hidden;
+    }
+    thead { background: var(--color-primary); }
+    thead th {
+      color: var(--color-on-primary);
+      font-weight: var(--fw-semibold);
+      padding: var(--spacing-150) var(--spacing-200);
+      text-align: left;
+      font-size: var(--fs-13);
+    }
+    tbody tr:nth-child(even) { background: var(--color-g50); }
+    tbody tr:hover { background: var(--color-sb100); }
+    td {
+      padding: var(--spacing-150) var(--spacing-200);
+      border-bottom: 1px solid var(--color-g200);
+      color: var(--color-g700);
+    }
+
+    /* ── Divider ── */
+    hr {
+      border: none;
+      border-top: 1px solid var(--color-g200);
+      margin: var(--spacing-300) 0;
+    }
+
+    /* ── Step Badge ── */
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--spacing-150);
+      background: var(--color-g50);
+      border: 1px solid var(--color-g200);
+      border-radius: var(--radius-150);
+      padding: var(--spacing-200);
+      margin: var(--spacing-150) 0;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      background: var(--color-primary);
+      color: var(--color-on-primary);
+      border-radius: var(--radius-circle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--fs-13);
+      font-weight: var(--fw-bold);
+    }
+
+    /* ── Links ── */
+    a {
+      color: var(--color-primary);
+      text-decoration: none;
+    }
+    a:hover { text-decoration: underline; }
+
+    /* ── Footer ── */
+    .doc-footer {
+      margin-top: var(--spacing-300);
+      padding-top: var(--spacing-200);
+      border-top: 1px solid var(--color-g200);
+      font-size: var(--fs-12);
+      color: var(--color-g400);
+      text-align: center;
+    }
+
+    /* ── Checkbox / Checklist ── */
+    .checklist {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: var(--spacing-150);
+    }
+    .checklist li {
+      margin-bottom: var(--spacing-75);
+    }
+    .checklist label {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--spacing-100);
+      cursor: pointer;
+      color: var(--color-g700);
+      font-size: var(--fs-15);
+      line-height: var(--lh-normal);
+    }
+    .checklist input[type="checkbox"] {
+      margin-top: 3px;
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      accent-color: var(--color-primary);
+      cursor: pointer;
+    }
+
+    /* ── Details / Toggle ── */
+    details {
+      background: var(--color-g100);
+      border: 1px solid var(--color-g200);
+      border-radius: var(--radius-100);
+      padding: var(--spacing-150) var(--spacing-200);
+      margin: var(--spacing-150) 0;
+    }
+    details summary {
+      font-weight: var(--fw-semibold);
+      color: var(--color-primary);
+      cursor: pointer;
+      font-size: var(--fs-14);
+      user-select: none;
+    }
+    details summary:hover { color: var(--color-g700); }
+    details p {
+      margin-top: var(--spacing-100);
+      font-size: var(--fs-14);
+      color: var(--color-g700);
+    }
+
+    /* ── Print ── */
+    @media print {
+      body { font-size: 12px; }
+      .page { padding: 20px; }
+      pre { white-space: pre-wrap; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- Header -->
+    <header class="doc-header">
+      <span class="badge">HRD · Notion 페이지</span>
+      <h1>Claude Code 완전 초보 가이드</h1>
+      <p class="meta">대상: 전 임직원 · 작성: HRD팀 · 2026-03-25</p>
+    </header>
+
+    <!-- Content -->
+    <main>
+
+      <blockquote>
+        🗓️ 작성일: 2026-03-25 | ✍️ 작성자: HRD Agent Team — Notion Producer<br>
+        📌 대상: Claude Code를 처음 사용하는 임직원 | ⏱️ 예상 완독 시간: 20분
+      </blockquote>
+
+      <hr>
+
+      <h2>📌 학습 목표</h2>
+
+      <p>이 가이드를 완독하면 다음을 할 수 있습니다:</p>
+
+      <ul>
+        <li>✅ Claude Code가 무엇인지, 기존 AI 도구와 어떻게 다른지 설명할 수 있다</li>
+        <li>✅ Claude Code를 직접 설치하고 실행할 수 있다</li>
+        <li>✅ CLAUDE.md를 만들어 프로젝트에 맞게 Claude를 셋업할 수 있다</li>
+        <li>✅ 핵심 명령어와 단축키를 활용해 효율적으로 작업할 수 있다</li>
+        <li>✅ 초보자가 자주 저지르는 실수를 사전에 예방할 수 있다</li>
+      </ul>
+
+      <hr>
+
+      <h2>📖 핵심 내용</h2>
+
+      <h3>1. Claude Code란? 🤖</h3>
+
+      <p>Claude Code는 <strong>Anthropic이 만든 터미널 기반 AI 코딩 어시스턴트</strong>입니다.</p>
+
+      <blockquote>
+        💡 <strong>한 줄 요약:</strong> VS Code 플러그인이 아닙니다. 터미널에서 직접 실행하는 도구로, 프로젝트 전체를 이해하고 자연어로 대화하면서 실제 코드를 작성해주는 AI 팀원입니다.
+      </blockquote>
+
+      <p><strong>Claude Code vs 일반 ChatGPT 비교</strong></p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>항목</th>
+            <th>일반 AI 챗봇</th>
+            <th>Claude Code</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>실행 방식</td>
+            <td>웹 브라우저</td>
+            <td>터미널(CLI)</td>
+          </tr>
+          <tr>
+            <td>파일 접근</td>
+            <td>❌ 불가</td>
+            <td>✅ 직접 읽기/쓰기</td>
+          </tr>
+          <tr>
+            <td>코드 수정</td>
+            <td>복사-붙여넣기 필요</td>
+            <td>✅ 자동 수정</td>
+          </tr>
+          <tr>
+            <td>프로젝트 이해</td>
+            <td>❌ 매번 설명 필요</td>
+            <td>✅ 전체 구조 파악</td>
+          </tr>
+          <tr>
+            <td>명령어 실행</td>
+            <td>❌ 불가</td>
+            <td>✅ 터미널 명령 실행</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p><strong>주요 이정표:</strong></p>
+      <ul>
+        <li>📅 2025년 2월: 베타 공개</li>
+        <li>📅 2025년 5월: 정식 출시</li>
+        <li>🏆 가장 널리 채택된 AI 개발 도구 중 하나로 성장</li>
+      </ul>
+
+      <p><strong>지원 환경:</strong></p>
+      <ul>
+        <li>🍎 macOS 10.15 이상</li>
+        <li>🐧 Ubuntu 20.04+ / Debian 10+</li>
+        <li>🪟 Windows (WSL을 통해 사용)</li>
+      </ul>
+
+      <hr>
+
+      <h3>2. 설치하기 🛠️</h3>
+
+      <div class="callout-warning">
+        ⚠️ <strong>사전 요건:</strong> Node.js 18 이상이 설치되어 있어야 합니다.
+      </div>
+
+      <p><strong>Step 1 — Claude Code 설치</strong></p>
+      <pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
+
+      <p><strong>Step 2 — 프로젝트 디렉토리로 이동</strong></p>
+      <pre><code>cd your-project</code></pre>
+
+      <p><strong>Step 3 — Claude Code 실행</strong></p>
+      <pre><code>claude</code></pre>
+
+      <p><strong>Step 4 — 설치 상태 확인 (선택)</strong></p>
+      <pre><code>/doctor</code></pre>
+
+      <blockquote>
+        🎉 터미널에 Claude Code 프롬프트가 뜨면 준비 완료!
+      </blockquote>
+
+      <hr>
+
+      <h3>3. 첫 번째 사용 🚀</h3>
+
+      <h4>3-1. CLAUDE.md 생성하기</h4>
+
+      <p>CLAUDE.md는 Claude Code에게 "이 프로젝트가 어떻게 동작하는지"를 알려주는 <strong>AI 팀원을 위한 설명서</strong>입니다. 이 파일이 없으면 매 세션마다 Claude가 프로젝트를 처음부터 파악해야 해서 토큰이 낭비됩니다.</p>
+
+      <pre><code>/init</code></pre>
+
+      <blockquote>
+        💡 <code>/init</code> 명령 하나로 CLAUDE.md 초안이 자동 생성됩니다!
+      </blockquote>
+
+      <p><strong>CLAUDE.md에 꼭 넣어야 할 내용:</strong></p>
+
+      <pre><code>## 빌드 명령어
+npm run build / pytest
+
+## 기술 스택
+React 18, TypeScript, axios
+
+## 주요 디렉토리
+src/components/ — UI 컴포넌트
+src/api/        — API 연동 모듈
+
+## 코딩 스타일
+ESLint + Prettier 사용, 함수형 컴포넌트 선호</code></pre>
+
+      <h4>3-2. 첫 번째 대화</h4>
+
+      <p>Claude Code를 실행한 뒤 자연어로 요청하면 됩니다.</p>
+
+      <p><strong>나쁜 예 ❌</strong></p>
+      <pre><code>로그인 버튼 고쳐줘</code></pre>
+
+      <p><strong>좋은 예 ✅</strong></p>
+      <pre><code>src/components/LoginButton.tsx 파일에서 로그인 버튼 클릭 시
+API 응답이 500 에러를 반환할 때 에러 메시지가 표시되지 않는 버그를 수정해줘.
+React 18, TypeScript, axios를 사용 중이야.</code></pre>
+
+      <blockquote>
+        📝 <strong>핵심 공식:</strong> 대상 파일 + 기술 스택 + 구체적인 문제 = 좋은 프롬프트
+      </blockquote>
+
+      <hr>
+
+      <h3>4. 꼭 알아야 할 기능 TOP 5 ⭐</h3>
+
+      <h4>🥇 1위 — Plan Mode (계획 모드)</h4>
+
+      <blockquote>
+        "팁을 하나만 기억한다면 이것입니다." — Claude Code 공식 베스트 프랙티스
+      </blockquote>
+
+      <p>코드를 바로 수정하기 전에 Claude가 <strong>단계별 계획을 먼저 보여주는</strong> 모드입니다. 계획을 확인하고 승인한 뒤에야 실행됩니다.</p>
+
+      <p><strong>활성화 방법:</strong></p>
+      <ul>
+        <li><code>Shift+Tab</code> 두 번 누르기</li>
+        <li>또는 <code>/plan</code> 명령어 입력</li>
+      </ul>
+
+      <pre><code>일반 모드 → (Shift+Tab) → Auto-accept 모드 → (Shift+Tab) → Plan Mode</code></pre>
+
+      <h4>🥈 2위 — 슬래시 명령어 치트시트</h4>
+
+      <table>
+        <thead>
+          <tr>
+            <th>명령어</th>
+            <th>설명</th>
+            <th>언제 쓰나?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>/init</code></td>
+            <td>CLAUDE.md 자동 생성</td>
+            <td>프로젝트 처음 시작 시</td>
+          </tr>
+          <tr>
+            <td><code>/clear</code></td>
+            <td>대화 기록 초기화</td>
+            <td>새 작업 시작할 때</td>
+          </tr>
+          <tr>
+            <td><code>/compact</code></td>
+            <td>대화 요약 (토큰 절약)</td>
+            <td>세션이 30분 이상 길어질 때</td>
+          </tr>
+          <tr>
+            <td><code>/plan</code></td>
+            <td>Plan Mode 진입</td>
+            <td>큰 작업 시작 전</td>
+          </tr>
+          <tr>
+            <td><code>/memory</code></td>
+            <td>CLAUDE.md 편집</td>
+            <td>프로젝트 정보 업데이트 시</td>
+          </tr>
+          <tr>
+            <td><code>/context</code></td>
+            <td>컨텍스트 사용량 확인</td>
+            <td>느려진다 싶을 때</td>
+          </tr>
+          <tr>
+            <td><code>/doctor</code></td>
+            <td>설치 상태 진단</td>
+            <td>오류 발생 시</td>
+          </tr>
+          <tr>
+            <td><code>/help</code></td>
+            <td>전체 명령어 보기</td>
+            <td>언제든지</td>
+          </tr>
+          <tr>
+            <td><code>/exit</code></td>
+            <td>종료</td>
+            <td>작업 완료 후</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>🥉 3위 — 키보드 단축키</h4>
+
+      <table>
+        <thead>
+          <tr>
+            <th>단축키</th>
+            <th>기능</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Shift+Tab</code></td>
+            <td>모드 순환 (일반 → Auto-accept → Plan)</td>
+          </tr>
+          <tr>
+            <td><code>Esc</code></td>
+            <td>작업 중단 (컨텍스트 유지)</td>
+          </tr>
+          <tr>
+            <td><code>Tab</code></td>
+            <td><code>/</code> 이후 명령어 자동완성</td>
+          </tr>
+          <tr>
+            <td><code>!명령어</code></td>
+            <td>쉘 명령 즉시 실행 (예: <code>!git status</code>)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>4위 — 컨텍스트 관리</h4>
+
+      <p>Claude의 컨텍스트 창(기억 공간)은 제한이 있습니다. 가득 차면 성능이 떨어집니다.</p>
+
+      <ul>
+        <li><code>/context</code> — 현재 사용량 시각적 확인</li>
+        <li><code>/clear</code> — 대화 기록 초기화 (새 작업 시작 시 습관화)</li>
+        <li><code>/compact</code> — 대화 요약으로 공간 확보</li>
+      </ul>
+
+      <h4>5위 — 이미지 드래그 앤 드롭</h4>
+
+      <p>터미널 창에 스크린샷을 드래그 앤 드롭하면 Claude가 이미지를 분석합니다. UI 변경 작업 결과를 바로 검증할 수 있어 매우 편리합니다.</p>
+
+      <hr>
+
+      <h3>5. 초보자 체크리스트 📋</h3>
+
+      <p>아래 항목을 순서대로 확인하며 Claude Code를 안전하게 사용하세요.</p>
+
+      <p><strong>시작 전 체크리스트</strong></p>
+      <ul class="checklist">
+        <li><label><input type="checkbox"> 🔧 Node.js 18+ 설치 확인 (<code>node --version</code>)</label></li>
+        <li><label><input type="checkbox"> 📦 Claude Code 설치 (<code>npm install -g @anthropic-ai/claude-code</code>)</label></li>
+        <li><label><input type="checkbox"> 📄 CLAUDE.md 생성 (<code>/init</code> 실행 후 내용 채우기)</label></li>
+        <li><label><input type="checkbox"> 🔍 프로젝트 스캔 결과 확인 (첫 실행 시 자동 분석)</label></li>
+      </ul>
+
+      <p><strong>매 작업 전 체크리스트</strong></p>
+      <ul class="checklist">
+        <li><label><input type="checkbox"> 🧹 이전 작업과 무관하다면 <code>/clear</code>로 초기화</label></li>
+        <li><label><input type="checkbox"> 📝 요청에 파일명, 기술 스택, 구체적 문제 포함</label></li>
+        <li><label><input type="checkbox"> 🗺️ 큰 작업이라면 Plan Mode 먼저 활성화</label></li>
+        <li><label><input type="checkbox"> 🔪 큰 작업은 작은 단계로 쪼개서 순서대로 진행</label></li>
+      </ul>
+
+      <p><strong>작업 후 체크리스트</strong></p>
+      <ul class="checklist">
+        <li><label><input type="checkbox"> ✔️ Claude가 수정한 코드 직접 검토 (Auto-accept 맹신 금지)</label></li>
+        <li><label><input type="checkbox"> 🧪 테스트 실행으로 결과 검증</label></li>
+        <li><label><input type="checkbox"> 📚 수정 이유 이해 (모르면 Claude에게 설명 요청)</label></li>
+      </ul>
+
+      <p><strong>피해야 할 실수 TOP 3</strong></p>
+      <ul>
+        <li>⛔ CLAUDE.md 없이 시작 → 매 세션마다 컨텍스트 낭비</li>
+        <li>⛔ 한 번에 너무 많은 변경 요청 → 불완전한 구현</li>
+        <li>⛔ Auto-accept를 핵심 기능에 무분별 사용 → 원치 않는 코드 변경</li>
+      </ul>
+
+      <hr>
+
+      <h2>🔗 참고 링크</h2>
+
+      <h3>공식 문서</h3>
+      <ul>
+        <li>📘 <a href="https://code.claude.com/docs/ko/overview">Claude Code 공식 문서 (한국어)</a></li>
+        <li>📗 <a href="https://code.claude.com/docs/en/quickstart">Claude Code 빠른 시작 가이드 (영문)</a></li>
+        <li>📙 <a href="https://code.claude.com/docs/en/best-practices">Claude Code 공식 베스트 프랙티스</a></li>
+      </ul>
+
+      <h3>초보자 가이드</h3>
+      <ul>
+        <li>🇰🇷 <a href="https://www.nxcode.io/resources/news/claude-code-tutorial-beginners-guide-2026">Claude Code 초보자 튜토리얼: 2026 완벽 시작 가이드</a></li>
+        <li>🌐 <a href="https://codewithmukesh.com/blog/claude-code-for-beginners/">Claude Code Tutorial for Beginners — Complete 2026 Guide</a></li>
+        <li>📖 <a href="https://medium.com/@dan.avila7/claude-code-learning-path-a-practical-guide-to-getting-started-fcc601550476">Claude Code Learning Path: a practical guide (Medium)</a></li>
+        <li>🚀 <a href="https://www.builder.io/blog/how-to-use-claude-code">How to Use Claude Code (Beginner Guide) — Builder.io</a></li>
+      </ul>
+
+      <h3>실전 팁 &amp; 베스트 프랙티스</h3>
+      <ul>
+        <li>⚡ <a href="https://www.builder.io/blog/claude-code-tips-best-practices">50 Claude Code Tips and Best Practices — Builder.io</a></li>
+        <li>🏆 <a href="https://www.eesel.ai/blog/claude-code-best-practices">7 Claude Code best practices for 2026 (from real projects)</a></li>
+        <li>🧩 <a href="https://agenticcoding.substack.com/p/32-claude-code-tips-from-basics-to">32 Claude Code Tips: From Basics to Advanced — YK (Substack)</a></li>
+      </ul>
+
+      <h3>명령어 치트시트</h3>
+      <ul>
+        <li>📋 <a href="https://awesomeclaude.ai/code-cheatsheet">Claude Code Developer Cheatsheet — AwesomeClaude</a></li>
+        <li>📋 <a href="https://shipyard.build/blog/claude-code-cheat-sheet/">Claude Code CLI Cheatsheet — Shipyard</a></li>
+        <li>📋 <a href="https://computingforgeeks.com/claude-code-cheat-sheet/">Claude Code Cheat Sheet 2026 — computingforgeeks</a></li>
+      </ul>
+
+      <h3>실수 방지</h3>
+      <ul>
+        <li>⚠️ <a href="https://generativeai.pub/why-most-people-fail-with-claude-code-and-how-to-avoid-it-673da0164f91">Why Most People Fail With Claude Code (and How to Avoid It)</a></li>
+        <li>⚠️ <a href="https://www.heyuan110.com/posts/ai/2026-02-25-claude-code-mistakes/">10 Claude Code Mistakes Beginners Make (And How to Fix Them)</a></li>
+      </ul>
+
+      <h3>GitHub 레포지토리</h3>
+      <ul>
+        <li>🐙 <a href="https://github.com/revfactory/claude-code-guide">claude-code-guide (한국어, revfactory)</a></li>
+        <li>🐙 <a href="https://github.com/ykdojo/claude-code-tips">claude-code-tips — 45가지 팁 (ykdojo)</a></li>
+        <li>🐙 <a href="https://github.com/Njengah/claude-code-cheat-sheet">claude-code-cheat-sheet (Njengah)</a></li>
+      </ul>
+
+      <hr>
+
+      <h2>🧠 퀴즈 (3문제)</h2>
+
+      <blockquote>
+        직접 사용해봤는지 확인하는 퀴즈입니다. 풀어보고 정답 토글을 열어보세요!
+      </blockquote>
+
+      <hr>
+
+      <p><strong>Q1. 당신은 새 프로젝트에서 Claude Code를 처음 실행했습니다.<br>
+      Claude가 프로젝트 구조를 이해할 수 있도록 가장 먼저 해야 할 일은 무엇인가요?</strong></p>
+
+      <ul>
+        <li>A) <code>/clear</code> 명령어로 대화를 초기화한다</li>
+        <li>B) <code>/init</code> 명령어로 CLAUDE.md를 생성하고 프로젝트 정보를 채운다</li>
+        <li>C) Auto-accept 모드를 켜고 코드 수정을 시작한다</li>
+        <li>D) <code>/compact</code> 명령어로 대화를 요약한다</li>
+      </ul>
+
+      <details>
+        <summary>정답 보기</summary>
+        <p><strong>정답: B) <code>/init</code> 명령어로 CLAUDE.md를 생성하고 프로젝트 정보를 채운다</strong></p>
+        <p>CLAUDE.md가 없으면 Claude는 매 세션마다 프로젝트 기술 스택과 구조를 처음부터 파악해야 합니다. 이는 잘못된 가정, 불필요한 질문, 토큰 낭비로 이어집니다. 가장 먼저 <code>/init</code>으로 CLAUDE.md를 생성하고 빌드 명령어, 기술 스택, 주요 디렉토리 정보를 채워두세요.</p>
+      </details>
+
+      <hr>
+
+      <p><strong>Q2. Claude Code로 작업하던 중 갑자기 응답 품질이 떨어지고 엉뚱한 코드를 생성하기 시작했습니다.<br>
+      가장 적절한 대처 방법은 무엇인가요?</strong></p>
+
+      <ul>
+        <li>A) Claude Code를 재설치한다</li>
+        <li>B) 같은 질문을 다시 반복해서 물어본다</li>
+        <li>C) <code>/context</code>로 사용량을 확인하고, <code>/compact</code> 또는 <code>/clear</code>로 컨텍스트를 정리한다</li>
+        <li>D) Auto-accept 모드를 끈다</li>
+      </ul>
+
+      <details>
+        <summary>정답 보기</summary>
+        <p><strong>정답: C) <code>/context</code>로 사용량을 확인하고, <code>/compact</code> 또는 <code>/clear</code>로 컨텍스트를 정리한다</strong></p>
+        <p>Claude의 컨텍스트 창(기억 공간)이 가득 차면 성능이 급격히 저하됩니다. <code>/context</code> 명령으로 현재 사용량을 시각적으로 확인하고, 세션을 이어가려면 <code>/compact</code>로 대화를 요약하거나, 새 작업을 시작하려면 <code>/clear</code>로 초기화하세요. 30분 이상의 긴 세션에서는 <code>/compact</code>를 습관적으로 사용하는 것이 좋습니다.</p>
+      </details>
+
+      <hr>
+
+      <p><strong>Q3. 복잡한 기능을 Claude Code에 요청하려고 합니다.<br>
+      가장 효과적인 접근 방식은 무엇인가요?</strong></p>
+
+      <ul>
+        <li>A) 모든 요구사항을 한 번에 나열해서 요청한다</li>
+        <li>B) Plan Mode(<code>/plan</code> 또는 <code>Shift+Tab</code> 두 번)를 먼저 활성화해서 계획을 확인한 뒤, 작업을 작은 단계로 나눠 순서대로 진행한다</li>
+        <li>C) Auto-accept 모드를 켜고 Claude에게 모든 것을 맡긴다</li>
+        <li>D) 요청을 최대한 짧고 간단하게 작성한다</li>
+      </ul>
+
+      <details>
+        <summary>정답 보기</summary>
+        <p><strong>정답: B) Plan Mode를 먼저 활성화해서 계획을 확인한 뒤, 작업을 작은 단계로 나눠 순서대로 진행한다</strong></p>
+        <p>"계획에 더 많은 시간을 쓸수록 Claude가 성공할 확률이 높아진다"는 것이 공식 베스트 프랙티스의 핵심 메시지입니다. 한 번에 너무 많은 변경을 요청하면 불완전한 구현, 일관성 없는 변경, 도구 호출 한도 초과로 이어집니다. Plan Mode로 접근 방식을 먼저 검토하고, 큰 작업은 반드시 작은 단계로 분리해서 각 단계를 검증하며 진행하세요.</p>
+      </details>
+
+      <hr>
+
+      <h2>💬 피드백 남기기</h2>
+
+      <p>이 가이드가 도움이 되셨나요? 아래 항목 중 해당하는 것을 체크해 주세요.</p>
+
+      <p><strong>만족도</strong></p>
+      <ul class="checklist">
+        <li><label><input type="checkbox"> 😍 매우 유익했어요</label></li>
+        <li><label><input type="checkbox"> 😊 도움이 됐어요</label></li>
+        <li><label><input type="checkbox"> 😐 보통이에요</label></li>
+        <li><label><input type="checkbox"> 😕 아쉬운 점이 있어요</label></li>
+      </ul>
+
+      <p><strong>추가로 알고 싶은 내용이 있다면 댓글로 남겨주세요!</strong></p>
+
+      <blockquote>
+        예: "실제 업무에서 활용하는 프롬프트 예시가 더 있으면 좋겠어요", "MCP 서버 연동 방법도 알고 싶어요" 등
+      </blockquote>
+
+      <p><strong>문의:</strong> HRD 팀 Slack <code>#hrd-education</code> 채널</p>
+
+      <hr>
+
+      <blockquote>
+        📝 이 문서는 HRD Agent Team이 제작했습니다. 내용 오류나 개선 제안은 언제든지 환영합니다.<br>
+        마지막 업데이트: 2026-03-25
+      </blockquote>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="doc-footer">
+      SentBe HRD팀 · 2026-03-25 · 내부 배포용
+    </footer>
+  </div>
+</body>
+</html>

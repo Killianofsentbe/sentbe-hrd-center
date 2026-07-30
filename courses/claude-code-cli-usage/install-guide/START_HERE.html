@@ -1,0 +1,79 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>먼저 보기</title><style>body{font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Noto Sans KR",sans-serif;line-height:1.7;color:#151823;background:#F7F8FB;margin:0}.wrap{max-width:880px;margin:0 auto;padding:42px 20px 80px}.top{margin-bottom:24px}.back{display:inline-block;color:#1462FC;font-weight:800;text-decoration:none;margin-bottom:18px}.doc{background:#fff;border:1px solid #E5E7EB;border-radius:18px;padding:30px;box-shadow:0 10px 28px rgba(16,24,40,.06)}h1,h2,h3{line-height:1.25;letter-spacing:-.4px}h1{font-size:34px}h2{font-size:25px;margin-top:34px;border-top:1px solid #eee;padding-top:24px}h3{font-size:20px;margin-top:24px}pre{background:#101828;color:#EAECF0;padding:16px;border-radius:12px;overflow:auto}code{font-family:SFMono-Regular,Consolas,monospace;background:#F2F4F7;padding:2px 5px;border-radius:5px}pre code{background:transparent;padding:0}blockquote{border-left:4px solid #1462FC;background:#EEF4FF;margin:14px 0;padding:12px 16px;color:#0C3698}a{color:#1462FC}ul,ol{padding-left:24px}p{margin:8px 0}</style></head><body><main class="wrap"><div class="top"><a class="back" href="../index.html">← 랜딩페이지로</a></div><article class="doc"><h1>Claude Code CLI 온보딩 — 여기서 시작하세요</h1>
+
+<blockquote>설치가 제일 큰 허들입니다. 막히면 정상입니다. 오류 화면을 캡처해서 지원 채널에 올리면 됩니다.</blockquote>
+
+<h2>3줄 요약</h2>
+
+<p>• Claude Code CLI는 **내 컴퓨터 폴더를 읽고 파일을 만들 수 있는 Claude**입니다.</p>
+<p>• 먼저 아래 표에서 내 OS에 맞는 설치 경로를 고르세요.</p>
+<p>• 설치가 끝나면 이 폴더의 `sample-files/`로 **첫 10분 체험**을 진행하세요.</p>
+
+<h2>1. 나는 어떤 문서를 보면 되나요?</h2>
+
+<pre><code>| 나는 이런 사용자 | 먼저 볼 내용 |</code></pre>
+<pre><code>|---|---|</code></pre>
+<pre><code>| Mac 사용자 | `Claude-Code-CLI-OS별-설치-가이드.md`의 **Part A. macOS 설치 가이드** |</code></pre>
+<pre><code>| Windows 사용자, 터미널이 익숙하지 않음 | `Claude-Code-CLI-OS별-설치-가이드.md`의 **Part B. Windows 설치 가이드 — 추천: Native Windows** |</code></pre>
+<pre><code>| Windows에서 PowerShell/CMD가 헷갈림 | Part B의 **PowerShell/CMD 혼동 주의** 섹션 |</code></pre>
+<pre><code>| Windows 개발자/자동화 작업 많음 | Native Windows 먼저 시도 후 필요하면 **Part C. WSL 방식** |</code></pre>
+<pre><code>| Linux 사용자 | **Part D. Linux 설치 가이드** |</code></pre>
+<pre><code>| 설치는 됐고 바로 써보고 싶음 | **Part E. 설치 후 첫 체험 미션** |</code></pre>
+<pre><code>| 설치 중 막힘 | 이 파일 아래의 **지원 요청 템플릿** 또는 `FAQ-문제해결-지원동선.md` |</code></pre>
+
+<h2>2. 예상 소요시간</h2>
+
+<p>• 설치: 5~15분</p>
+<p>• 로그인: 2~5분</p>
+<p>• 첫 체험: 10분</p>
+
+<h2>3. 성공 기준</h2>
+
+<p>아래 명령을 실행했을 때 버전이 보이면 설치 성공입니다.</p>
+
+<pre><code>claude --version</code></pre>
+
+<p>예상 결과:</p>
+
+<pre><code>claude-code x.x.x</code></pre>
+
+<h2>4. 설치 후 반드시 해볼 첫 10분 체험</h2>
+
+<p>웹/앱 Claude와 CLI의 차이를 가장 빨리 느끼는 미션입니다.</p>
+
+<p>1. 이 폴더의 `sample-files/`를 바탕화면에 복사합니다.</p>
+<p>2. 터미널/PowerShell에서 복사한 폴더로 이동합니다.</p>
+<p>3. `claude`를 실행합니다.</p>
+<p>4. Claude Code 안에서 아래를 입력합니다.</p>
+
+<pre><code>이 폴더에 어떤 파일이 있는지 확인하고, 각 파일이 무엇을 담고 있는지 한 줄씩 설명해줘.</code></pre>
+
+<p>그다음 아래를 입력합니다.</p>
+
+<pre><code>memo1.md, memo2.md, todo.csv를 읽고 README.md를 만들어줘. README에는 1) 핵심 요약 2) 담당자별 할 일 3) 다음 액션을 넣어줘.</code></pre>
+
+<p>체감 포인트:</p>
+
+<p>• 웹/앱 Claude: 내가 파일을 직접 올리거나 붙여넣어야 함</p>
+<p>• Claude Code CLI: 현재 폴더 파일을 직접 읽고, 결과 파일을 직접 생성함</p>
+
+<h2>5. 설치 중 막혔을 때</h2>
+
+<p>먼저 <code>FAQ-문제해결-지원동선.md</code>에서 오류 메시지를 찾아보세요.</p>
+
+<p>그래도 해결되지 않으면 Slack 지원 채널에 아래 템플릿으로 요청하세요.</p>
+
+<pre><code>[Claude Code CLI 설치 지원 요청]
+1. OS: Windows 11 / macOS / 기타
+2. 사용한 문서: 예) Part B Windows 설치 가이드
+3. 실행한 명령어: 예) irm https://claude.ai/install.ps1 | iex
+4. 오류 메시지 또는 캡처: 첨부
+5. claude --version 결과: 성공/실패
+6. claude doctor 결과: 가능하면 첨부
+7. 회사 VPN/프록시 사용 여부: 예/아니오</code></pre>
+
+<h2>6. 배포 담당자용 참고</h2>
+
+<p>• UX/비개발자 관점 개선안: `UX-온보딩-패키지-개선안.md`</p>
+<p>• FAQ/지원 동선 초안: `FAQ-문제해결-지원동선.md`</p>
+<p>• 스크린샷 촬영 체크리스트: `screenshots/README.md`</p>
+<p>• Slack/Notion/파일럿 배포 템플릿: `rollout/`</p></article></main></body></html>
